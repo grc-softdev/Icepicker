@@ -1,15 +1,73 @@
-import Container from "@/components/Container";
-import Navbar from "@/components/Navbar";
-import Users from "@/components/Users";
+'use client';
+
+import Image from 'next/image';
+import logo from '../app/assets/logo.png';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { api } from './services/api';
 
 export default function Home() {
+  const [name, setName] = useState('')
+  const router = useRouter();
+
+  const handleRegister = async (formData: FormData) => {
+    const name = formData.get("name");
+    
+    if (!name) {
+      return { success: false, message: "Preencha todos os campos" };
+    }
+  
+    try {
+      await api.post("/users", {
+        name,
+      });
+      return { success: true, message: "Cadastrado com sucesso" };
+    } catch (err) {
+      console.error(err);
+      return { success: false, message: "Erro ao cadastrar. Tente novamente." };
+    }
+  };
+  
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const result = await handleRegister(formData);
+
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+    router.push('/dashboard')
+  };
+
+
   return (
-    <div className="w-full min-h-screen flex flex-col bg-linear-to-r from-cyan-500 to-blue-500">
-      <Navbar />
-      <div className="flex items-center">
-        <Container />
-        <Users />
-      </div>
+    <div className="p-6 min-h-screen rounded-xl bg-magnolia">
+      <section className="mt-40 flex flex-col items-center">
+        <Image src={logo} alt="logo do serviço" width={200} />
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            required
+            name="name"
+            placeholder="Digite Seu Nickname"
+            onChange={e => setName(e.target.value)}
+            className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2 "
+          />
+
+          <button
+            className="rounded-md w-full bg-marine text-white mb-4  py-3 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
+            id="button"
+            type="submit"
+          >
+            Acessar
+          </button>
+        </form>
+      </section>
     </div>
   );
 }
