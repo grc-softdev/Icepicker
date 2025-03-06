@@ -1,8 +1,16 @@
-import Container from "@/components/Container";
+'use client'
 import Navbar from "@/components/Navbar";
 import Users from "@/components/Users";
+import { useParams } from "next/navigation";
+import Container  from "@/components/Container";
 
 const Room = () => {
+  const { roomId } = useParams();
+
+  if (!roomId) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-linear-to-r from-cyan-500 to-blue-500">
     <Navbar />
@@ -14,4 +22,4 @@ const Room = () => {
   )
 }
 
-export default Room
+export default Room;
