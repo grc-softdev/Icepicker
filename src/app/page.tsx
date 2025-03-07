@@ -1,15 +1,16 @@
-'use client';
-import Image from 'next/image';
-import logo from '../app/assets/logo.png';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { api } from './services/api';
+"use client";
+import Image from "next/image";
+import logo from "../app/assets/logo.png";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { api } from "./services/api";
+import { useForm } from "@/context/FormContext";
 const Home = () => {
-
-  const [name, setName] = useState("");
+  const { name, setName, roomLink, setRoomLink } = useForm();
+  console.log(name)
   const [roomName, setRoomName] = useState("");
   const [error, setError] = useState("");
-  const [roomLink, setRoomLink] = useState("");
+  
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
@@ -38,7 +39,7 @@ const Home = () => {
   return (
     <div className="p-6 min-h-screen rounded-xl bg-magnolia">
       <section className="mt-40 flex flex-col items-center">
-      <Image src={logo} alt="logo do serviço" width={200} />
+        <Image src={logo} alt="logo do serviço" width={200} />
         <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -86,4 +87,3 @@ const Home = () => {
 };
 
 export default Home;
-

@@ -1,9 +1,12 @@
+import { useForm } from '@/context/FormContext'
 import Image from 'next/image'
 import React from 'react'
 import { CiBacon } from 'react-icons/ci'
 import { FiMessageCircle } from 'react-icons/fi'
 
 const CardUser = () => {
+  const { name } = useForm()
+  console.log(name)
   return (
     <div
       className="border max-w-70 max-h-24 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6"
@@ -21,7 +24,7 @@ const CardUser = () => {
             />
           </div>
           <div className="flex flex-col ml-2">
-            <h6 className="font-bold">Zé Lombriga</h6>
+            <h6 className="font-bold">{name}</h6>
 
           </div>
         </div>

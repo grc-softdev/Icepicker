@@ -1,11 +1,12 @@
 'use client';
 import { api } from "@/app/services/api";
+import { useForm } from "@/context/FormContext";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const Container = () => {
-  const [questions, setQuestions] = useState([]);
-  const [currQuestion, setCurrQuestion] = useState(0); // State to track the current question index
+  const { questions, setQuestions } = useForm()
+  const [currQuestion, setCurrQuestion] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -21,7 +22,7 @@ const Container = () => {
   }, []);
 
   const handleNextQuestion = () => {
-    setCurrQuestion((prevState) => (prevState + 1) % questions.length); // Loop back to the first question
+    setCurrQuestion((prevState) => (prevState + 1) % questions.length);
   };
 
   return (

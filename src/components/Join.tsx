@@ -23,7 +23,7 @@ const Join = () => {
   return (
     <div>
       <h1>Welcome to {roomName} Room</h1>
-      <JoinModal sessionId={sessionId} roomName={roomName} />
+      <JoinModal sessionId={sessionId} />
     </div>
   );
 };

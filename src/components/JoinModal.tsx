@@ -2,7 +2,11 @@ import { api } from "@/app/services/api";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const Join = ({ sessionId, roomName }) => {
+type JoinProps = {
+  sessionId: string;
+};
+
+const Join = ({ sessionId }: JoinProps) => {
   const [userName, setUserName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -31,7 +35,7 @@ const Join = ({ sessionId, roomName }) => {
         name: userName,
       });
 
-      history.push(`/room/${sessionId}?name=${response.data.userName}`);
+      router.push(`/room/${sessionId}?name=${response.data.userName}`);
     } catch (err) {
       setError("Failed to join the session. Please try again.");
       setIsSubmitting(false);
