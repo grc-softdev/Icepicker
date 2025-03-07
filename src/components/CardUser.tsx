@@ -6,7 +6,7 @@ import { FiMessageCircle } from 'react-icons/fi'
 
 const CardUser = () => {
   const { name } = useForm()
-  console.log(name)
+ 
   return (
     <div
       className="border max-w-70 max-h-24 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6"

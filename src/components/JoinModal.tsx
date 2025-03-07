@@ -35,7 +35,7 @@ const Join = ({ sessionId }: JoinProps) => {
         name: userName,
       });
 
-      router.push(`/room/${sessionId}?name=${response.data.userName}`);
+      router.push(`/session/${sessionId}?name=${response.data.userName}`);
     } catch (err) {
       setError("Failed to join the session. Please try again.");
       setIsSubmitting(false);
@@ -45,7 +45,7 @@ const Join = ({ sessionId }: JoinProps) => {
   return (
     <div className="modal">
       <div className="modal-content">
-        <h2>Join the Room</h2>
+        <h2>Join the Session</h2>
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="userName">Enter your name:</label>
@@ -61,7 +61,7 @@ const Join = ({ sessionId }: JoinProps) => {
           {error && <p className="error">{error}</p>}
 
           <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Joining..." : "Join Room"}
+            {isSubmitting ? "Joining..." : "Join Session"}
           </button>
         </form>
       </div>

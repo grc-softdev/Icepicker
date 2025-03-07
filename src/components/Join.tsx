@@ -5,24 +5,24 @@ import { api } from "@/app/services/api";
 
 const Join = () => {
   const { sessionId } = useParams();
-  const [roomName, setRoomName] = useState("");
+  const [sessionName, setSessionName] = useState("");
 
   useEffect(() => {
-    const fetchRoomData = async () => {
+    const fetchSessionData = async () => {
       try {
         const response = await api.get(`/get-session/${sessionId}`);
-        setRoomName(response.data.sessionName);
+        setSessionName(response.data.sessionName);
       } catch (err) {
         console.error("Error fetching session data", err);
       }
     };
 
-    fetchRoomData();
+    fetchSessionData();
   }, [sessionId]);
 
   return (
     <div>
-      <h1>Welcome to {roomName} Room</h1>
+      <h1>Welcome to {sessionName} Session</h1>
       <JoinModal sessionId={sessionId} />
     </div>
   );

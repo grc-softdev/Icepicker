@@ -6,9 +6,9 @@ import { useState } from "react";
 import { api } from "./services/api";
 import { useForm } from "@/context/FormContext";
 const Home = () => {
-  const { name, setName, roomLink, setRoomLink } = useForm();
-  console.log(name)
-  const [roomName, setRoomName] = useState("");
+  const { name, setName, sessionLink, setSessionLink } = useForm();
+  
+  const [sessionName, setSessionName] = useState("");
   const [error, setError] = useState("");
   
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,19 +17,19 @@ const Home = () => {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!name || !roomName) {
-      setError("name and/or roomName are required");
+    if (!name || !sessionName) {
+      setError("name and/or sessionName are required");
       return;
     }
 
     try {
-      const response = await api.post("/room", { name, roomName });
+      const response = await api.post("/session", { name, sessionName });
 
-      setRoomLink(response.data.roomLink);
+      setSessionLink(response.data.sessionLink);
       setIsAdmin(response.data.isAdmin);
       setError("");
 
-      router.push(response.data.roomLink);
+      router.push(response.data.sessionLink);
     } catch (err) {
       setError("Error. Try Again");
       console.log(err);
@@ -53,9 +53,9 @@ const Home = () => {
           <input
             type="text"
             required
-            placeholder="room's name"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
+            placeholder="sessions's name"
+            value={sessionName}
+            onChange={(e) => setSessionName(e.target.value)}
             className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
           />
 

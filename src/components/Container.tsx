@@ -1,23 +1,23 @@
-'use client';
+"use client";
 import { api } from "@/app/services/api";
 import { useForm } from "@/context/FormContext";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const Container = () => {
-  const { questions, setQuestions } = useForm()
+  const { questions, setQuestions } = useForm();
   const [currQuestion, setCurrQuestion] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await api.get('/questions'); 
+        const response = await api.get("/questions");
         setQuestions(response.data);
       } catch (error) {
-        console.log('Error fetching questions', error);
+        console.log("Error fetching questions", error);
       }
     };
-    
+
     fetchQuestions();
   }, []);
 
@@ -36,7 +36,7 @@ const Container = () => {
           className="rounded-full"
         />
       </div>
-      
+
       {questions.length > 0 && (
         <div key={questions[currQuestion].id}>
           <h2 className="mt-20 text-2xl font-extrabold p-4 text-center">
@@ -49,8 +49,8 @@ const Container = () => {
         <span className="font-medium">Reloaded</span>
       </div>
 
-      <div 
-        className="mt-20 w-24 h-10 rounded-md bg-sky-600 flex items-center justify-center cursor-pointer hover:bg-sky-700 transition duration-300" 
+      <div
+        className="mt-20 w-24 h-10 rounded-md bg-sky-600 flex items-center justify-center cursor-pointer hover:bg-sky-700 transition duration-300"
         onClick={handleNextQuestion} // Handle click for changing the question
       >
         <span className="text-white font-bold">Next</span>

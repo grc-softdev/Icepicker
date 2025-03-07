@@ -4,10 +4,10 @@ import Users from "@/components/Users";
 import { useParams } from "next/navigation";
 import Container  from "@/components/Container";
 
-const Room = () => {
-  const { roomId } = useParams();
+const Session = () => {
+  const { sessionId } = useParams();
 
-  if (!roomId) {
+  if (!sessionId) {
     return <div>Carregando...</div>;
   }
 
@@ -22,4 +22,4 @@ const Room = () => {
   )
 }
 
-export default Room;
+export default Session;
