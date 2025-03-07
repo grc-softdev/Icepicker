@@ -4,13 +4,11 @@ import logo from "../app/assets/logo.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "./services/api";
-import { useForm } from "@/context/FormContext";
+import useLocalStorage from "@/hooks/useLocalStorage";
 const Home = () => {
-  const { name, setName, sessionLink, setSessionLink } = useForm();
-  
+  const [name, setName] = useLocalStorage<string>("name", "");  
   const [sessionName, setSessionName] = useState("");
   const [error, setError] = useState("");
-  
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
@@ -24,15 +22,13 @@ const Home = () => {
 
     try {
       const response = await api.post("/session", { name, sessionName });
-
-      setSessionLink(response.data.sessionLink);
+      console.log(response.data)
       setIsAdmin(response.data.isAdmin);
       setError("");
 
       router.push(response.data.sessionLink);
     } catch (err) {
       setError("Error. Try Again");
-      console.log(err);
     }
   };
 

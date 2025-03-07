@@ -1,25 +1,24 @@
 "use client";
 import { api } from "@/app/services/api";
-import { useForm } from "@/context/FormContext";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-const Container = () => {
-  const { questions, setQuestions } = useForm();
+const Container = ({questions}) => {
   const [currQuestion, setCurrQuestion] = useState(0);
+  
+  // useEffect(() => {
+  //   const fetchQuestions = async () => {
+  //     try {
+  //       const response = await api.get("/questions");
+  //       setQuestions(response.data);
+  //     } catch (error) {
+  //       console.log("Error fetching questions", error);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await api.get("/questions");
-        setQuestions(response.data);
-      } catch (error) {
-        console.log("Error fetching questions", error);
-      }
-    };
-
-    fetchQuestions();
-  }, []);
+  //   fetchQuestions();
+  // }, []);
 
   const handleNextQuestion = () => {
     setCurrQuestion((prevState) => (prevState + 1) % questions.length);

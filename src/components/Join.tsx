@@ -9,6 +9,7 @@ const Join = () => {
 
   useEffect(() => {
     const fetchSessionData = async () => {
+      
       try {
         const response = await api.get(`/get-session/${sessionId}`);
         setSessionName(response.data.sessionName);

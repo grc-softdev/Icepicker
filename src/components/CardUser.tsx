@@ -4,8 +4,8 @@ import React from 'react'
 import { CiBacon } from 'react-icons/ci'
 import { FiMessageCircle } from 'react-icons/fi'
 
-const CardUser = () => {
-  const { name } = useForm()
+const CardUser = ({hostName, userName}) => {
+  console.log(hostName, userName)
  
   return (
     <div
@@ -24,7 +24,7 @@ const CardUser = () => {
             />
           </div>
           <div className="flex flex-col ml-2">
-            <h6 className="font-bold">{name}</h6>
+            <h6 className="font-bold">{userName}{hostName}</h6>
 
           </div>
         </div>

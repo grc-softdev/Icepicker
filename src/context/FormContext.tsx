@@ -25,16 +25,12 @@ export const useForm = () => {
 };
 
 export const FormProvider = ({ children }: FormProviderProps) => {
-  const [questions, setQuestions] = useLocalStorage<Questions[]>(
-    "questions",
-    []
-  );
-  const [name, setName] = useLocalStorage<string>("name", "");
-  const [sessionLink, setSessionLink] = useState("");
+  
+  
 
   return (
     <FormContext.Provider
-      value={{ questions, name, setQuestions, setName, setSessionLink }}
+      value={{  }}
     >
       {children}
     </FormContext.Provider>

@@ -1,12 +1,12 @@
 import React from 'react'
 import CardUser from './CardUser'
 
-const Users = () => {
+const Users = ({hostName, userName}) => {
 
   return (
     <div className='min-w-[300px] ml-4'>
       <div className='overflow-y-auto'>
-        <CardUser/>
+        <CardUser hostName={hostName} userName={userName}/>
       </div>
       <div className='flex items-center justify-between h-12'>
         <input placeholder=' message' className='border border-solid rounded-sm'/>
