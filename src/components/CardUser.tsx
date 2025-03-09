@@ -2,7 +2,7 @@
 import { capFirstLetter } from "@/utils/format";
 import Image from "next/image";
 import React from "react";
-import { CiBacon } from "react-icons/ci";
+import { LuCrown } from "react-icons/lu";
 import { FiMessageCircle } from "react-icons/fi";
 
 export type CardUserProps = {
@@ -10,15 +10,14 @@ export type CardUserProps = {
   hostId: string;
   userId: string;
   isSelected: boolean;
-  onClick: () => void;
 };
 
-const CardUser = ({ name, isSelected, onClick, userId, hostId }: CardUserProps) => {
+const CardUser = ({ name, isSelected, userId, hostId }: CardUserProps) => {
   
   return (
-    <div className={`border max-w-70 max-h-24 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6 cursor-pointer 
+    <div className={`border w-70 h-24 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6 cursor-pointer 
       ${isSelected ? "bg-blue-200 border-blue-500" : "hover:bg-gray-100"}`}
-      onClick={onClick}>
+      >
       <div className="flex justify-between">
         <div className="flex items-center justify-start mb-4">
           <Image
@@ -41,13 +40,10 @@ const CardUser = ({ name, isSelected, onClick, userId, hostId }: CardUserProps) 
       <div className="flex items-center justify-between">
         {hostId === userId && (
           <div className="flex items-center justify-center">
-            <CiBacon className="text-lg" />
+            <LuCrown className="text-lg" />
           </div>
         )}
-        <div className="flex items-center justify-center ml-2 cursor-pointer">
-          <FiMessageCircle />
-          <span className="ml-1">2</span>
-        </div>
+
       </div>
     </div>
   );

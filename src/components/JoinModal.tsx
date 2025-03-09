@@ -1,66 +1,106 @@
 import { api } from "@/app/services/api";
+import Image from "next/image";
+import joinlogo from "../app/assets/joinlogo.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type JoinProps = {
   sessionId: string;
-  setName: React.Dispatch<React.SetStateAction<string>>
+  setName: React.Dispatch<React.SetStateAction<string>>;
   setError: (error: string) => void;
   error: string;
 };
 
-const JoinModal = ({ sessionId, setError, error, setName}: JoinProps) => {
+const JoinModal = ({ sessionId, setError, error, setName }: JoinProps) => {
   const [joinName, setJoinName] = useState("");
-  const router = useRouter()
+  const router = useRouter();
 
   const handleJoinSession = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!joinName.trim()) return;
 
     try {
-     await api.put(`/session/${sessionId}`, { name: joinName, sessionId });
+      await api.put(`/session/${sessionId}`, { name: joinName, sessionId });
 
+      setName(joinName);
 
-
-      console.log('about to call setName')
-      setName(joinName)
-
-      router.push(`/session/${sessionId}`)
+      router.push(`/session/${sessionId}`);
     } catch (err) {
       setError("Failed to join session. Try again.");
     }
-    
   };
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center">
-      <div className="w-[400px] max-h-[500px] bg-white rounded-lg flex flex-col p-6">
-      <div className="mt-40 flex flex-col items-center">
-        <h1 className='text-marine font-bold text-2xl mb-2'>Join the Session</h1>
+      <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-white rounded-lg p-6">
         <form onSubmit={handleJoinSession}>
-          
-            <label htmlFor="userName">Enter your name:</label>
-            <input
-              type="text"
-              id="userName"
-              value={joinName}
-              onChange={(e) => setJoinName(e.target.value)}
-              className="border p-2 rounded-md"
-              required
-            />
-    
+          <div className="flex items-center justify-center mb-4">
+          <Image
+            src={joinlogo}
+            alt="logo"
+            width={100}
+            className="cursor-pointer flex items-center justify-center"
+          />
+          </div>
+          <input
+            type="text"
+            id="userName"
+            placeholder="username"
+            value={joinName}
+            onChange={(e) => setJoinName(e.target.value)}
+            className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
+            required
+          />
+
+          {error && <p className="text-red-500 mb-2">{error}</p>}
+
           <button
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
             onClick={handleJoinSession}
+            className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
+            type="submit"
           >
-            Join
+            Go to Room
           </button>
-          {error && <p className="text-red-500">{error}</p>}
         </form>
-        </div>
       </div>
     </div>
   );
 };
 
 export default JoinModal;
+
+{
+  /* <div className="p-6 min-h-screen rounded-xl bg-magnolia">
+<section className="mt-40 flex flex-col items-center">
+  <Image src={logo} alt="logo" width={200} className="cursor-pointer" />
+  <form onSubmit={handleLogin}>
+    <input
+      type="text"
+      required
+      placeholder="username"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
+    />
+
+    <input
+      type="text"
+      required
+      placeholder="sessions's name"
+      value={sessionName}
+      onChange={(e) => setSessionName(e.target.value)}
+      className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
+    />
+
+    {error && <p className="text-red-500 mb-2">{error}</p>}
+
+    <button
+      className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
+      type="submit"
+    >
+      Go to Room
+    </button>
+  </form>
+</section>
+</div> */
+}

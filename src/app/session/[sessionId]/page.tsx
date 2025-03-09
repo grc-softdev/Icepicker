@@ -17,9 +17,14 @@ export type Data = {
   sessionLink: string;
   hostId: string;
   userId: string;
-  questions: string[];
+  questions: Question[];
   users: User[];
 };
+
+type Question = {
+  name: string;
+  id: string;
+}
 
 const Session = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -71,18 +76,21 @@ const Session = () => {
   return (
     <div className="w-full min-h-screen flex flex-col">
       <Navbar sessionLink={data.sessionLink} />
-      <div className="flex items-center">
+      <div className="flex items-center mx-10">
+      <div className="">
+      <Users
+          hostId={data.hostId}
+          users={data.users}
+          selectedUser={selectedUser}
+        />
+        </div>
         <Container
           questions={data.questions}
           users={data.users}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
         />
-        <Users
-          hostId={data.hostId}
-          users={data.users}
-          selectedUser={selectedUser}
-        />
+       
       </div>
       {error && <div className="text-red-500">{error}</div>}
     </div>

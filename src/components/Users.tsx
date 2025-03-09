@@ -11,15 +11,15 @@ type UsersProps = {
   setSelectedUser: React.Dispatch<React.SetStateAction<User>>
 }
 
-const Users = ({ hostId, users, selectedUser, setSelectedUser}:UsersProps) => {
+const Users = ({ hostId, users, selectedUser }:UsersProps) => {
   
   return (
-    <div className="min-w-[300px] ml-4">
-      <div className="overflow-y-auto">
-        {users.map((user) => (
-          <CardUser key={user.id} name={user.name} hostId={hostId} userId={user.id} isSelected={selectedUser?.id === user.id} onClick={() => setSelectedUser(user)} />
-        ))}
-      </div>
+    <div className="min-w-[300px] ml-4 h-[700px] overflow-scroll">
+        {users.map((user) => {
+        return ( 
+          <CardUser key={user.id} name={user.name} hostId={hostId} userId={user.id} isSelected={selectedUser?.id === user.id} />
+      )
+})}
       <div className="flex items-center justify-between h-12">
         <input
           placeholder=" message"
