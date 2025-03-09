@@ -75,14 +75,12 @@ const Session = () => {
       />
       <Navbar />
       <div className="flex items-center mx-20">
-      <div className="">
       <Users
           hostId={data.hostId}
           users={data.users}
           selectedUser={selectedUser}
           sessionLink={data.sessionLink}
         />
-        </div>
         <Container
           questions={data.questions}
           users={data.users}

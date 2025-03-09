@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import logo from "../app/assets/logo.png";
+import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "./services/api";
@@ -44,7 +44,7 @@ const Home = () => {
   return (
     <div className="p-6 min-h-screen rounded-xl bg-magnolia">
       <section className="mt-40 flex flex-col items-center">
-        <Image src={logo} alt="logo" width={200} className="cursor-pointer" />
+        <Image src={nav} alt="logo" width={200} className="cursor-pointer" />
         <form onSubmit={handleLogin}>
           <input
             type="text"

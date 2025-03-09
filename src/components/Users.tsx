@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CardUser from "./CardUser";
 import { User } from "@/app/session/[sessionId]/page";
 import { toast, ToastContainer } from "react-toastify";
+import { GoCopy } from "react-icons/go";
 
 type UsersProps = {
   hostName: string;
@@ -26,7 +27,7 @@ const Users = ({ hostId, users, selectedUser, sessionLink }: UsersProps) => {
   };
 
   return (
-    <div className="min-w-[300px] ml-4 h-[700px] overflow-scroll">
+    <div className="min-w-[300px] ml-4 h-[600px] overflow-scroll">
       {users.map((user) => {
         return (
           <CardUser
@@ -43,23 +44,24 @@ const Users = ({ hostId, users, selectedUser, sessionLink }: UsersProps) => {
         <ToastContainer />
 
         {sessionLink && (
-          <div className="flex items-center justify-center rounded-md w-full mr-6 p-2 gap-x-2 border border-neutral-200 mb-4 py-3 text-sm font-semibold shadow-sm">
+          <div className="flex items-center justify-center rounded-md w-full mr-6 p-2 gap-x-2 bg-background  border border-neutral-200 mb-4 py-3 text-sm font-semibold shadow-sm">
             <input
               type="text"
-              className="bg-gray-50 border border-neutral-200 text-gray-500 text-sm rounded-lg w-4/5 p-2.5"
+              className="border border-neutral-200 text-gray-500 text-sm rounded-lg w-full p-2.5"
               value={sessionLink}
               readOnly
             />
             <button
               onClick={handleCopyLink}
-              className="text-white bg-greenblue hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto py-2.5 text-center items-center inline-flex justify-center"
+              className="text-white bg-blue-200 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto py-2.5 text-center items-center inline-flex justify-center"
             >
               {!copied ? (
-                <span className="px-4">Copy</span>
+                <div className=" sm:px px-4"><GoCopy  /></div>
+                
               ) : (
-                <div className="inline-flex items-center px-4">
+                <div className="inline-flex items-center sm:px-2 px-4">
                   <svg
-                    className="w-3 h-3 text-white me-1.5"
+                    className=" h-3 text-white me-1.5"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

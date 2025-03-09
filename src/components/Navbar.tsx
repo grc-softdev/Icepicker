@@ -1,15 +1,13 @@
 import Image from "next/image";
-import joinlogo from "../app/assets/joinlogo.png";
-import { ToastContainer, toast } from "react-toastify";
+import nav from "../app/assets/nav.png";
 
 import Link from "next/link";
 
-const Navbar = ({ sessionLink }: { sessionLink: string }) => {
-  
+const Navbar = () => {
   return (
-    <div className="flex items-center justify-center">
-       <Link href={"/"}>
-      <Image src={joinlogo} width={100} height={120} alt="logo" />
+    <div className="flex items-center justify-start mt-4 mx-24 mb-4">
+      <Link href={"/"}>
+        <Image src={nav} width={80} height={100} alt="logo" />
       </Link>
     </div>
   );

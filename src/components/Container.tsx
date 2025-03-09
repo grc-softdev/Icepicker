@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import user1 from "../app/assets/user1.webp";
 import { User } from "@/app/session/[sessionId]/page";
 import { capFirstLetter } from "../utils/format";
 
@@ -24,6 +25,12 @@ const Container = ({
   setSelectedUser,
 }: QuestionsProps) => {
   const [currQuestion, setCurrQuestion] = useState(0);
+
+  useEffect(() => {
+    if (users.length > 0) {
+      setSelectedUser(users[0]);
+    }
+  }, [users, setSelectedUser]); // E
 
   const handleNextQuestion = () => {
     setCurrQuestion((prevState) => (prevState + 1) % questions.length);
@@ -48,7 +55,7 @@ const Container = ({
       <div className="flex items-center">
         <Link href={"/"}>
           <Image
-            src={"https://i.imgur.com/OZ1YruF.png"}
+            src={user1}
             width={100}
             height={100}
             alt="user"
@@ -67,7 +74,7 @@ const Container = ({
 
       <div className="w-full flex flex-col items-center">
         {selectedUser && (
-          <h2 className="mt-10 text-xl font-black">
+          <h2 className="mt-6 text-xl font-black">
             {capFirstLetter(selectedUser.name)}
           </h2>
         )}
@@ -80,7 +87,7 @@ const Container = ({
       </div>
       <div
         onClick={handleNextQuestion}
-        className="mt-20 w-36 h-10 rounded-md bg-greenblue flex items-center justify-center cursor-pointer hover:bg-greenblue/75 transition duration-300"
+        className="mt-10 w-36 h-10 rounded-md bg-greenblue flex items-center justify-center cursor-pointer hover:bg-greenblue/75 transition duration-300"
       >
         <span className="text-white font-bold">Next Question</span>
       </div>
