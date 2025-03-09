@@ -1,3 +1,4 @@
+
 import { capFirstLetter } from "@/utils/format";
 import Image from "next/image";
 import React from "react";
@@ -6,12 +7,18 @@ import { FiMessageCircle } from "react-icons/fi";
 
 export type CardUserProps = {
   name: string;
-  isHost?: boolean;
+  hostId: string;
+  userId: string;
+  isSelected: boolean;
+  onClick: () => void;
 };
 
-const CardUser = ({ name, isHost = false }: CardUserProps) => {
+const CardUser = ({ name, isSelected, onClick, userId, hostId }: CardUserProps) => {
+  
   return (
-    <div className="border max-w-70 max-h-24 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6">
+    <div className={`border max-w-70 max-h-24 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6 cursor-pointer 
+      ${isSelected ? "bg-blue-200 border-blue-500" : "hover:bg-gray-100"}`}
+      onClick={onClick}>
       <div className="flex justify-between">
         <div className="flex items-center justify-start mb-4">
           <Image
@@ -23,7 +30,6 @@ const CardUser = ({ name, isHost = false }: CardUserProps) => {
           />
           <div className="flex flex-col ml-2">
             <h6 className="font-bold">{capFirstLetter(name)}</h6>
-            {isHost && <span className="text-sm text-gray-500">Host</span>}
           </div>
         </div>
         <div className="flex items-start justify-center">
@@ -33,10 +39,9 @@ const CardUser = ({ name, isHost = false }: CardUserProps) => {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        {isHost && (
+        {hostId === userId && (
           <div className="flex items-center justify-center">
             <CiBacon className="text-lg" />
-            <span className="ml-1">Host</span>
           </div>
         )}
         <div className="flex items-center justify-center ml-2 cursor-pointer">

@@ -8,16 +8,16 @@ function useLocalStorage<T>(key: string, defaultValue: T | (() => T)) {
     try {
       const jsonValue = window.localStorage.getItem(key);
       if (jsonValue !== null) {
+
         setValue(JSON.parse(jsonValue));
       }
     } catch (error) {
       console.error("Erro ao ler do localStorage", error);
     }
+
   }, [key]);
 
   useEffect(() => {
-
-    console.log(value.length)
     window.localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
 

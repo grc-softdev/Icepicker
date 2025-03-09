@@ -1,7 +1,9 @@
+'use client'
 import Image from "next/image";
 import logo from "../app/assets/logo.png";
 import React from "react";
-import { toast } from "sonner";
+import { ToastContainer, toast } from 'react-toastify';
+
 import Link from "next/link";
 
 
@@ -9,7 +11,7 @@ const Navbar = ({ sessionLink }: {sessionLink: string}) => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(sessionLink || "");
-    toast.success("copied link");
+    toast("Invite your friends! =)");
   };
   return (
     <div className="flex items-center justify-between gap-16 mx-12">
@@ -18,6 +20,8 @@ const Navbar = ({ sessionLink }: {sessionLink: string}) => {
         <Link href={'/'}>
         <div className="text-marine font-bold hover:text-greenblue cursor-pointer">Home</div>
         </Link>
+        <ToastContainer />
+
         {sessionLink && (
           <div
             onClick={handleCopyLink}

@@ -1,15 +1,15 @@
 import { api } from "@/app/services/api";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type JoinProps = {
   sessionId: string;
-  userName: string;
+  setName: React.Dispatch<React.SetStateAction<string>>
   setError: (error: string) => void;
   error: string;
 };
 
-const JoinModal = ({ sessionId, setData, setError, error, setName}: JoinProps) => {
+const JoinModal = ({ sessionId, setError, error, setName}: JoinProps) => {
   const [joinName, setJoinName] = useState("");
   const router = useRouter()
 

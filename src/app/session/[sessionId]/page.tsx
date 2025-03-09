@@ -8,26 +8,41 @@ import { api } from "@/app/services/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import JoinModal from "@/components/JoinModal";
 
+export type User = {
+  id: string;
+  name: string;
+};
+
+export type Data = {
+  sessionLink: string;
+  hostId: string;
+  userId: string;
+  questions: string[];
+  users: User[];
+};
+
 const Session = () => {
-  const { sessionId } = useParams();
-  const [error, setError] = useState("");
+  const { sessionId } = useParams<{ sessionId: string }>();
+  const [error, setError] = useState<string>("");
 
-  const emptyString = ""
+  const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
 
-  const [name, setName] = useLocalStorage('name',emptyString);
+  const defaultUser = cachedUserName || "";
 
-  const [data, setData] = useState();
+  const [name, setName] = useLocalStorage<string>("name", defaultUser);
 
-  const isAlreadyLoggedIn = name?.length  !== 0 // starts with an empty string
+  const [data, setData] = useState<Data | null>(null);
 
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
+  const isAlreadyLoggedIn = name?.length !== 0; 
 
   useEffect(() => {
     if (!sessionId) return;
 
     const fetchSession = async () => {
       try {
-        const res = await api.get(`/session/${sessionId}`);
+        const res = await api.get<Data>(`/session/${sessionId}`);
         setData(res.data);
         setError("");
       } catch (err) {
@@ -36,23 +51,38 @@ const Session = () => {
     };
 
     fetchSession();
-  }, []);
-
+  }, [sessionId]);
 
   if (!isAlreadyLoggedIn) {
-    return <JoinModal data={data} error={error} setError={setError} sessionId={sessionId} setName={setName}/> 
-  } 
+    return (
+      <JoinModal
+        error={error}
+        setError={setError}
+        sessionId={sessionId}
+        setName={setName}
+      />
+    );
+  }
 
   if (!data) {
-    return null
+    return null;
   }
 
   return (
     <div className="w-full min-h-screen flex flex-col">
       <Navbar sessionLink={data.sessionLink} />
       <div className="flex items-center">
-        <Container questions={data.questions} users={data.users} />
-        <Users hostName={data.hostName} users={data.users} />
+        <Container
+          questions={data.questions}
+          users={data.users}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
+        <Users
+          hostId={data.hostId}
+          users={data.users}
+          selectedUser={selectedUser}
+        />
       </div>
       {error && <div className="text-red-500">{error}</div>}
     </div>

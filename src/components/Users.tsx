@@ -1,22 +1,23 @@
 import React from "react";
 import CardUser from "./CardUser";
+import { User } from "@/app/session/[sessionId]/page";
 
 type UsersProps = {
   hostName: string;
   users: User[];
+  hostId: string;
+  userId: string;
+  selectedUser: User;
+  setSelectedUser: React.Dispatch<React.SetStateAction<User>>
 }
-export type User = {
-  name: string;
-  id:string;
-}
-const Users = ({ hostName, users}:UsersProps) => {
+
+const Users = ({ hostId, users, selectedUser, setSelectedUser}:UsersProps) => {
+  
   return (
     <div className="min-w-[300px] ml-4">
       <div className="overflow-y-auto">
-
-        <CardUser name={hostName} isHost/>
         {users.map((user) => (
-          <CardUser key={user.id} name={user.name} />
+          <CardUser key={user.id} name={user.name} hostId={hostId} userId={user.id} isSelected={selectedUser?.id === user.id} onClick={() => setSelectedUser(user)} />
         ))}
       </div>
       <div className="flex items-center justify-between h-12">
