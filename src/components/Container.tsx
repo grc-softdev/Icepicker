@@ -73,16 +73,16 @@ const Container = ({
         )}
         <div
           onClick={handleNextUser}
-          className="mt-20 w-36 h-10 rounded-md bg-sky-600 flex items-center justify-center cursor-pointer hover:bg-sky-700 transition duration-300"
+          className="mt-20 w-36 h-10 rounded-md bg-marine flex items-center justify-center cursor-pointer hover:bg-marine/75 transition duration-300"
         >
           <span className="text-white font-bold">Next User</span>
         </div>
       </div>
       <div
         onClick={handleNextQuestion}
-        className="mt-8 w-36 h-10 rounded-md cursor-pointer bg-neutral-200 flex items-center justify-center"
+        className="mt-20 w-36 h-10 rounded-md bg-greenblue flex items-center justify-center cursor-pointer hover:bg-greenblue/75 transition duration-300"
       >
-        <span className="font-medium">Next Question</span>
+        <span className="text-white font-bold">Next Question</span>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ type JoinProps = {
   setName: React.Dispatch<React.SetStateAction<string>>;
   setError: (error: string) => void;
   error: string;
+  isOpen: boolean;
 };
 
 const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) => {
@@ -42,7 +43,7 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
           <Image
             src={joinlogo}
             alt="logo"
-            width={100}
+            width={150}
             className="cursor-pointer flex items-center justify-center"
           />
           </div>
@@ -59,7 +60,6 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
           {error && <p className="text-red-500 mb-2">{error}</p>}
 
           <button
-            onClick={handleJoinSession}
             className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
             type="submit"
           >
@@ -73,38 +73,3 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
 
 export default JoinModal;
 
-{
-  /* <div className="p-6 min-h-screen rounded-xl bg-magnolia">
-<section className="mt-40 flex flex-col items-center">
-  <Image src={logo} alt="logo" width={200} className="cursor-pointer" />
-  <form onSubmit={handleLogin}>
-    <input
-      type="text"
-      required
-      placeholder="username"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
-    />
-
-    <input
-      type="text"
-      required
-      placeholder="sessions's name"
-      value={sessionName}
-      onChange={(e) => setSessionName(e.target.value)}
-      className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
-    />
-
-    {error && <p className="text-red-500 mb-2">{error}</p>}
-
-    <button
-      className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
-      type="submit"
-    >
-      Go to Room
-    </button>
-  </form>
-</section>
-</div> */
-}

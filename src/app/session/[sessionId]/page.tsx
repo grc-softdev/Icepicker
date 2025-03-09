@@ -71,15 +71,16 @@ const Session = () => {
         setError={setError}
         sessionId={sessionId}
         setName={setName}
-        isOpen={isAlreadyLoggedIn}
+        isOpen={!isAlreadyLoggedIn}
       />
-      <Navbar sessionLink={data.sessionLink} />
-      <div className="flex items-center mx-10">
+      <Navbar />
+      <div className="flex items-center mx-20">
       <div className="">
       <Users
           hostId={data.hostId}
           users={data.users}
           selectedUser={selectedUser}
+          sessionLink={data.sessionLink}
         />
         </div>
         <Container
