@@ -1,24 +1,22 @@
 "use client";
-import { api } from "@/app/services/api";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import React, { useState } from "react";
+import { User } from "./Users";
+import { capFirstLetter } from "../utils/format"
 
-const Container = ({questions}) => {
+type QuestionsProps = {
+  questions: question[];
+  users: User[]
+};
+
+type question = {
+  name: string;
+  id: string;
+};
+
+const Container = ({ questions, users }: QuestionsProps) => {
   const [currQuestion, setCurrQuestion] = useState(0);
-  
-  // useEffect(() => {
-  //   const fetchQuestions = async () => {
-  //     try {
-  //       const response = await api.get("/questions");
-  //       setQuestions(response.data);
-  //     } catch (error) {
-  //       console.log("Error fetching questions", error);
-  //     }
-  //   };
-
-  //   fetchQuestions();
-  // }, []);
 
   const handleNextQuestion = () => {
     setCurrQuestion((prevState) => (prevState + 1) % questions.length);
@@ -26,19 +24,25 @@ const Container = ({questions}) => {
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-screen border-r-2 border-neutral-200">
-      <div className="flex mt-10 items-center justify-center">
-        <Image
-          src={"https://i.imgur.com/OZ1YruF.png"}
-          width={100}
-          height={100}
-          alt="user"
-          className="rounded-full"
-        />
+      <div className="flex mt-10 items-center justify-center cursor-pointer">
+        <Link href={"/"}>
+          <Image
+            src={"https://i.imgur.com/OZ1YruF.png"}
+            width={100}
+            height={100}
+            alt="user"
+            className="rounded-full cursor-pointer"
+          />
+        </Link>
       </div>
-
+    
+      {users.map((userName) => (
+        <h2 className='mt-10 text-xl font-black' key={userName.id}>{capFirstLetter(userName.name)}</h2>
+      ))}
+      
       {questions.length > 0 && (
         <div key={questions[currQuestion].id}>
-          <h2 className="mt-20 text-2xl font-extrabold p-4 text-center">
+          <h2 className="mt-10 text-2xl font-extrabold p-4 text-center">
             {questions[currQuestion].name}
           </h2>
         </div>
@@ -50,7 +54,7 @@ const Container = ({questions}) => {
 
       <div
         className="mt-20 w-24 h-10 rounded-md bg-sky-600 flex items-center justify-center cursor-pointer hover:bg-sky-700 transition duration-300"
-        onClick={handleNextQuestion} // Handle click for changing the question
+        onClick={handleNextQuestion} 
       >
         <span className="text-white font-bold">Next</span>
       </div>
