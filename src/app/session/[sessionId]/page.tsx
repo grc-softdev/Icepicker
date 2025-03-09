@@ -58,16 +58,7 @@ const Session = () => {
     fetchSession();
   }, [sessionId]);
 
-  if (!isAlreadyLoggedIn) {
-    return (
-      <JoinModal
-        error={error}
-        setError={setError}
-        sessionId={sessionId}
-        setName={setName}
-      />
-    );
-  }
+
 
   if (!data) {
     return null;
@@ -75,6 +66,13 @@ const Session = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col">
+      <JoinModal
+        error={error}
+        setError={setError}
+        sessionId={sessionId}
+        setName={setName}
+        isOpen={isAlreadyLoggedIn}
+      />
       <Navbar sessionLink={data.sessionLink} />
       <div className="flex items-center mx-10">
       <div className="">

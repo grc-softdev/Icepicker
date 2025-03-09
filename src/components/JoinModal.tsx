@@ -11,7 +11,7 @@ type JoinProps = {
   error: string;
 };
 
-const JoinModal = ({ sessionId, setError, error, setName }: JoinProps) => {
+const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) => {
   const [joinName, setJoinName] = useState("");
   const router = useRouter();
 
@@ -29,6 +29,10 @@ const JoinModal = ({ sessionId, setError, error, setName }: JoinProps) => {
       setError("Failed to join session. Try again.");
     }
   };
+
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center">

@@ -3,7 +3,6 @@ import { capFirstLetter } from "@/utils/format";
 import Image from "next/image";
 import React from "react";
 import { LuCrown } from "react-icons/lu";
-import { FiMessageCircle } from "react-icons/fi";
 
 export type CardUserProps = {
   name: string;
