@@ -31,7 +31,7 @@ const Home = () => {
         name,
         sessionName,
       });
-      console.log(response.data);
+ 
       setIsAdmin(response.data.isAdmin);
       setError("");
 

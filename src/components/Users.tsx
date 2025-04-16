@@ -19,69 +19,65 @@ const Users = ({ hostId, users, selectedUser, sessionLink }: UsersProps) => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(sessionLink || "");
-    setCopied(true); 
-
+    setCopied(true);
     toast("Invite your friends! =)");
-
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="min-w-[300px] ml-4 h-[600px] overflow-scroll">
-      {users.map((user) => {
-        return (
-          <CardUser
-            key={user.id}
-            name={user.name}
-            hostId={hostId}
-            userId={user.id}
-            isSelected={selectedUser?.id === user.id}
-          />
-        );
-      })}
+    <section className="flex flex-col">
+     
 
-      <div className="flex items-center justify-between h-12 mt-10">
+      <div className="flex flex-col justify-start min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <ToastContainer />
+        
+        <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
+          {users.map((user) => (
+            <div key={user.id}>
+              <CardUser
+                name={user.name}
+                hostId={hostId}
+                userId={user.id}
+                isSelected={selectedUser?.id === user.id}
+              />
+            </div>
+          ))}
+        </div>
 
         {sessionLink && (
-          <div className="flex items-center justify-center rounded-md w-full mr-6 p-2 gap-x-2 bg-background  border border-neutral-200 mb-4 py-3 text-sm font-semibold shadow-sm">
-            <input
-              type="text"
-              className="border border-neutral-200 text-gray-500 text-sm rounded-lg w-full p-2.5"
-              value={sessionLink}
-              readOnly
-            />
-            <button
-              onClick={handleCopyLink}
-              className="text-white bg-blue-200 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto py-2.5 text-center items-center inline-flex justify-center"
-            >
-              {!copied ? (
-                <div className=" sm:px px-4"><GoCopy  /></div>
-                
-              ) : (
-                <div className="inline-flex items-center sm:px-2 px-4">
+          <div className="mt-6">
+            <div className="flex items-center gap-2 p-3 border border-gray-200 rounded-xl shadow-sm bg-gray-50">
+              <input
+                type="text"
+                className="flex-1 px-3 py-2 text-sm text-gray-600 bg-transparent focus:outline-none"
+                value={sessionLink}
+                readOnly
+              />
+              <button
+                onClick={handleCopyLink}
+                className={`flex items-center justify-center px-3 py-2 rounded-lg transition-all duration-200 ${
+                  copied
+                    ? "bg-green-500 text-white"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+              >
+                {!copied ? <GoCopy /> : (
                   <svg
-                    className=" h-3 text-white me-1.5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 text-white"
                     fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
                     viewBox="0 0 16 12"
                   >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M1 5.917 5.724 10.5 15 1.5"
-                    />
+                    <path d="M1 5.917 5.724 10.5 15 1.5" />
                   </svg>
-                </div>
-              )}
-            </button>
+                )}
+              </button>
+            </div>
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

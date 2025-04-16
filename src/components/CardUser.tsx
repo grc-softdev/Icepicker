@@ -13,31 +13,24 @@ export type CardUserProps = {
 const CardUser = ({ name, isSelected, userId, hostId }: CardUserProps) => {
   return (
     <div
-      className={`border w-70 h-20 border-neutral-200 rounded-lg p-3 mb-2 gap-2 mr-6 cursor-pointer 
-      ${isSelected ? "bg-blue-200 border-blue-500" : "hover:bg-gray-100"}`}
+      className={`border w-full h-20 rounded-xl p-3 bg-background flex items-center gap-3 cursor-pointer transition-colors duration-300 
+      ${isSelected ? "bg-blue-200 border-blue-500" : "hover:bg-blue-300 border-neutral-200"}`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center justify-start ml-2 mr-2 mb-4">
-          <Image
-            src={user2}
-            width={50}
-            height={60}
-            alt="user"
-            className="rounded-full"
-          />
-          <div className="flex flex-col ml-4 ">
-            <h6 className="font-bold">{capFirstLetter(name)}</h6>
-            {hostId === userId ? (
-              <div className="flex items-center justify-start">
-                <span>Host</span>
-              </div>
-            ) : (
-              <div className="flex items-center justify-start">
-                <span>User</span>
-              </div>
-            )}
-          </div>
-        </div>
+      <Image
+        src={user2}
+        width={50}
+        height={50}
+        alt="user"
+        className="rounded-full"
+      />
+
+      <div className="flex flex-col">
+        <span className="font-semibold">{capFirstLetter(name)}</span>
+        {hostId === userId && (
+          <span className="text-xs mt-1 text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full w-fit">
+            Host
+          </span>
+        )}
       </div>
     </div>
   );

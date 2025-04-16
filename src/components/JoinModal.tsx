@@ -1,6 +1,6 @@
 import { api } from "@/app/services/api";
 import Image from "next/image";
-import joinlogo from "../app/assets/joinlogo.png";
+import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -37,13 +37,13 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center">
-      <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-white rounded-lg p-6">
+      <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-background rounded-lg p-6">
         <form onSubmit={handleJoinSession}>
-          <div className="flex items-center justify-center mb-4">
+          <div className="flex items-center justify-center">
           <Image
-            src={joinlogo}
+            src={nav}
             alt="logo"
-            width={150}
+            width={200}
             className="cursor-pointer flex items-center justify-center"
           />
           </div>
