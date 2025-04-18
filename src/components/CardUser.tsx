@@ -7,14 +7,14 @@ export type CardUserProps = {
   name: string;
   hostId: string;
   userId: string;
-  isSelected: boolean;
+  isCurrent: boolean;
 };
 
-const CardUser = ({ name, isSelected, userId, hostId }: CardUserProps) => {
+const CardUser = ({ name, isCurrent, userId, hostId }: CardUserProps) => {
   return (
     <div
       className={`border w-full h-20 rounded-xl p-3 bg-background flex items-center gap-3 cursor-pointer transition-colors duration-300 
-      ${isSelected ? "bg-blue-200 border-blue-500" : "hover:bg-blue-300 border-neutral-200"}`}
+      ${isCurrent ? "bg-blue-200 border-blue-500" : "hover:bg-blue-300 border-neutral-200"}`}
     >
       <Image
         src={user2}

@@ -29,23 +29,24 @@ const Reactions = ({
   reactions,
   disabledReactions,
 }: ReactionsProps) => {
+
   return (
     <div className="flex gap-4 mt-4 flex-wrap justify-center">
-      {Object.entries(reactions).map(([reactionName, count]) => {
-        const isReacted = disabledReactions.includes(reactionName);
+      {reactions?.map((reaction) => {
+        const isReacted = disabledReactions.includes(reaction.setName);
 
         return (
           <button
-            key={reactionName}
-            onClick={() => onReact(reactionName)}
+            key={reaction.id}
+            onClick={() => onReact(reaction.name)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-lg transition font-medium ${
               isReacted
                 ? "bg-blue-300 text-blue-900"
                 : "bg-blue-100 hover:bg-blue-200 text-blue-800"
             }`}
           >
-            {getEmojiSymbol(reactionName)}
-            <span className="text-sm">{count}</span>
+            {getEmojiSymbol(reaction.name)}
+            <span className="text-sm">{reaction.amount}</span>
           </button>
         );
       })}

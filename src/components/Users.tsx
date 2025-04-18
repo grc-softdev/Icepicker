@@ -9,12 +9,11 @@ type UsersProps = {
   users: User[];
   hostId: string;
   userId: string;
-  selectedUser: User;
-  setSelectedUser: React.Dispatch<React.SetStateAction<User>>;
+  currentUser: User;
   sessionLink: string;
 };
 
-const Users = ({ hostId, users, selectedUser, sessionLink }: UsersProps) => {
+const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = () => {
@@ -38,7 +37,7 @@ const Users = ({ hostId, users, selectedUser, sessionLink }: UsersProps) => {
                 name={user.name}
                 hostId={hostId}
                 userId={user.id}
-                isSelected={selectedUser?.id === user.id}
+                isCurrent={currentUser?.id === user.id}
               />
             </div>
           ))}

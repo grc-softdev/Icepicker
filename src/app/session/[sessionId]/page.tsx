@@ -19,8 +19,8 @@ export type Data = {
   hostName: string;
   hostId: string;
   userId: string;
-  currentQuestion: Question | null;
-  currentUser: User | null;
+  currentQuestion: Question;
+  currentUser: User;
   questions: Question[];
   users: User[];
 };
@@ -43,9 +43,9 @@ const Session = () => {
   const [data, setData] = useState<Data | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [sessionUser, setSessionUser] = useState<User | null>(null)
   const isAlreadyLoggedIn = name?.length !== 0;
-  
+
+
   useEffect(() => {
     if (!sessionId) return;
 
@@ -55,24 +55,30 @@ const Session = () => {
         setData(res.data);
         setCurrentUser(res.data.currentUser)
         setCurrentQuestion(res.data.currentQuestion)
+
+        const localUserName = localStorage.getItem("name")
+          const getUser = res.data.users.find((user) => user.name === localUserName)
+          if (getUser) {
+            setSessionUser(getUser)
+          } else {
+            console.warn("user nao encontado")
+          }
+
         setError("");
 
       } catch (err) {
         setError("Error. Try Again");
       }
     };
-
+  
     fetchSession();
 
-    // // Set up polling
-    // const interval = setInterval(fetchSession, 2500);
-
-    // // Clear interval on unmount or if sessionId changes
-    // return () => clearInterval(interval);
   }, [sessionId]);
 
-  
-  
+  const sessionUser = data?.users.find((user) => {
+    return user.name === name
+  })
+
   const updateToNextQuestion = async () => {
     try {
       const res = await api.put(`/session/${sessionId}/next-question`);
@@ -100,9 +106,6 @@ const Session = () => {
   };
 
   console.log(data)
-  console.log(updateToNextUser)
-
-
 
   if (!data) {
     return null;
@@ -127,14 +130,11 @@ const Session = () => {
         />
 
         <Container
-          questions={data.questions}
           currentQuestion={currentQuestion}
           setCurrentQuestion={setCurrentQuestion}
           updateToNextQuestion={updateToNextQuestion}
           updateToNextUser={updateToNextUser}
           currentUser={currentUser}
-          setCurrentUser={setCurrentUser}
-          users={data.users}
           sessionUser={sessionUser}
           sessionId={sessionId}
           hostId={data.hostId}

@@ -1,23 +1,13 @@
 "use client";
 
-// 1. resolveria a reactions pra um usuario
-// por dentro de questions
-// e criar uma coisa chamada "current question", q tenha qm tah respondendo e os dados normais dela
-// 1.1 fazer td sem a parte do sincrionismo, ou seja, testar atualizando kd um dos usuarios pra q tenha uma nova chamada
-// 2. implementar um websocket pra comunicar as mudancas pra mais de um usuario
-
-
-// passo 1: criar uma forma de indetificar a currentquestion
-// passo 2: colocar a lista de usuarios que jah deram like em kd uma das reactions
-// passo 3: checar se o usuario logado (ver no localstorage, achar ele no users), jah esta contido no array de users feito acima
-
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import user1 from "../app/assets/user1.webp";
 import { User } from "@/app/session/[sessionId]/page";
 import { capFirstLetter } from "../utils/format";
 import Reactions from "./Reactions";
+import { api } from "@/app/services/api";
 
 export type QuestionsProps = {
   questions: question[];
@@ -26,68 +16,90 @@ export type QuestionsProps = {
   setCurrentUser: React.Dispatch<React.SetStateAction<User>>;
   currentQuestion: question;
   setCurrentQuestion: React.Dispatch<React.SetStateAction<question>>;
-  updateToNextQuestion: () => void
-  updateToNextUser:() => void
+  updateToNextQuestion: () => void;
+  updateToNextUser: () => void;
   currentUser: User;
   hostId: string;
   sessionUser: User;
+  sessionId: string;
 };
 
 export type question = {
   name: string;
   id: string;
   isCurrent?: boolean;
-  reactions: {
-    name: string;
-    amount: number;
-    UserReaction?: {
-      user: {
-        id: string;
-        name: string;
-      };
-    }[];
-  }[];
-};
+  reactions: Reaction[];
+}
+
+export type Reaction = {
+  name: string,
+  amount: number,
+  sessionId: string,
+  users: User[]
+}
 
 const Container = ({
-  questions,
   currentQuestion,
+  setCurrentQuestion,
   updateToNextUser,
   updateToNextQuestion,
-  setCurrentUser,
   currentUser,
-  users,
   sessionUser,
   sessionId,
   hostId,
 }: QuestionsProps) => {
-  const [reactionsByQuestion, setReactionsByQuestion] = useState<
-    Record<string, Record<string, number>>
+  const [userReactions, setUserReactions] = useState<
+    Record<string, Record<string, string[]>>
   >({});
-
-  useEffect(() => {
-    if (users.length > 0) {
-      setCurrentUser(users[0]);
-    }
-  }, [users, setCurrentUser]);
-
-  
-
-  const handleNextUser = () => {
-    if (!currentUser) {
-      setCurrentUser(users[0]);
+  console.log(sessionId)
+  const onReact = async (reactionName: string) => {
+    if (!sessionUser?.id || !currentQuestion?.id) {
       return;
     }
 
-    const currentIndex = users.findIndex((user) => user.id === currentUser.id);
-    if (currentIndex !== -1 && currentIndex < users.length - 1) {
-      setCurrentUser(users[currentIndex + 1]);
-    } else {
-      setCurrentUser(users[0]);
+    console.log("sending reaction" , {
+      userId: sessionUser?.id,
+      questionId: currentQuestion.id,
+      name: reactionName,
+      sessionId: sessionId
+    })
+
+    try {
+      const res = await api.post(`/session/${sessionId}/toggle`, {
+        userId: sessionUser?.id,
+        questionId: currentQuestion?.id,
+        reactionName: reactionName,
+        sessionId: sessionId,
+      });
+
+      const updateReactions = res?.data?.reactions;
+
+if (!Array.isArray(updateReactions)) {
+  console.error("updateReactions não é um array:", updateReactions);
+  return;
+}
+
+setCurrentQuestion((prev) => ({
+  ...prev,
+  reactions: updateReactions,
+}));
+
+const foundReaction = updateReactions.find((react) => react.name === reactionName);
+
+const reactionDetected = foundReaction?.users?.map((usr) => usr.id) ?? [];
+
+setUserReactions((prev) => ({
+  ...prev,
+  [currentQuestion.id]: {
+    ...prev[currentQuestion.id],
+    [sessionUser.id]: reactionDetected,
+  },
+}));
+    } catch (err) {
+      console.error("Erro desconhecido:", err);
     }
   };
-
-
+  console.log(onReact);
 
   return (
     <section className="flex items-center justify-center lg:mt-[-90px] py-10 px-4 w-full">
@@ -108,60 +120,16 @@ const Container = ({
           </h2>
         )}
 
-        {sessionUser && (
+        {
           <Reactions
-          questionId={currentQuestion?.id}
-          reactions={reactionsByQuestion[currentQuestion.id] || {}}
-          disabledReactions={
-            userReactions[currentQuestion.id]?.[sessionUser] || []
-          }
-          sessionUserId={sessionUser.id}
-          onReact={(reactionName: string) => {
-            const questionId = currentQuestion.id;
-            const userId = sessionUser.id;
-        
-      
-        
-            const alreadyReacted =
-              userReactions[questionId]?.[userId]?.includes(reactionName);
-            if (alreadyReacted) {
-              setReactionsByQuestion((prev) => ({
-                ...prev,
-                [questionId]: {
-                  ...prev[questionId],
-                  [reactionName]: Math.max((prev[questionId]?.[reactionName] || 1) -1, 0)
-                }
-              }))
-              
-              setUserReactions((prev) => ({
-                ...prev,
-                [questionId]: {
-                  ...prev[questionId],
-                  [userId]: prev[questionId]?.[userId].filter((reac) => reac !== reactionName || [])
-                }
-              }))
-            
-            } else {
-              setReactionsByQuestion((prev) => ({
-                ...prev,
-                [questionId]: {
-                  ...prev[questionId],
-                  [reactionName]: (prev[questionId]?.[reactionName] || 0) + 1,
-                }
-              }))
-
-              setUserReactions((prev) => ({
-                  ...prev,
-                  [questionId]: {
-                    ...prev[questionId],
-                    [userId]: [...(prev[questionId]?.[userId] || {}, reactionName)]
-                }
-              }))
+            questionId={currentQuestion?.id}
+            reactions={currentQuestion?.reactions}
+            disabledReactions={
+              userReactions[currentQuestion.id]?.[sessionUser.id] || []
             }
-        
-          }}
-        />
-        )}
+            onReact={onReact}
+          />
+        }
         {currentQuestion && (
           <div className="w-full">
             <h2 className="mt-8 text-lg font-semibold p-4 text-center text-gray-800">
