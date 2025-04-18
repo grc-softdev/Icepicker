@@ -1,11 +1,4 @@
 "use client";
-
-// 1. resolveria a reactions pra um usuario
-// por dentro de questions
-// e criar uma coisa chamada "current question", q tenha qm tah respondendo e os dados normais dela
-// 1.1 fazer td sem a parte do sincrionismo, ou seja, testar atualizando kd um dos usuarios pra q tenha uma nova chamada
-// 2. implementar um websocket pra comunicar as mudancas pra mais de um usuario
-
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
@@ -24,9 +17,10 @@ export type User = {
 export type Data = {
   sessionLink: string;
   hostName: string;
-
   hostId: string;
   userId: string;
+  currentQuestion: Question | null;
+  currentUser: User | null;
   questions: Question[];
   users: User[];
 };
@@ -34,6 +28,7 @@ export type Data = {
 type Question = {
   name: string;
   id: string;
+  isCurrent: boolean;
 };
 
 const Session = () => {
@@ -45,15 +40,12 @@ const Session = () => {
   const defaultUser = cachedUserName || "";
 
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
-
   const [data, setData] = useState<Data | null>(null);
-
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-   const [sessionUser, setSessionUser] = useState<User | null>(null)
-
+  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [sessionUser, setSessionUser] = useState<User | null>(null)
   const isAlreadyLoggedIn = name?.length !== 0;
-
+  
   useEffect(() => {
     if (!sessionId) return;
 
@@ -61,13 +53,9 @@ const Session = () => {
       try {
         const res = await api.get<Data>(`/session/${sessionId}`);
         setData(res.data);
+        setCurrentUser(res.data.currentUser)
+        setCurrentQuestion(res.data.currentQuestion)
         setError("");
-
-        const currUser = res.data.users.find((user) => user.name === name)
-        if(currUser) {
-          setSelectedUser(currUser)
-          setSessionUser(currUser)
-        }
 
       } catch (err) {
         setError("Error. Try Again");
@@ -83,7 +71,38 @@ const Session = () => {
     // return () => clearInterval(interval);
   }, [sessionId]);
 
-  console.log(data);
+  
+  
+  const updateToNextQuestion = async () => {
+    try {
+      const res = await api.put(`/session/${sessionId}/next-question`);
+        setCurrentQuestion(res.data.currentQuestion)
+    } catch (err) {
+      if (err.response) {
+        console.error("Erro na resposta:", err.response.data);
+      } else {
+        console.error("Erro desconhecido:", err);
+      }
+    }
+  };
+
+  const updateToNextUser = async () => {
+    try {
+      const res = await api.put(`/session/${sessionId}/next-user`);
+        setCurrentUser(res.data.currentUser)
+    } catch (err) {
+      if (err.response) {
+        console.error("Erro na resposta:", err.response.data);
+      } else {
+        console.error("Erro desconhecido:", err);
+      }
+    }
+  };
+
+  console.log(data)
+  console.log(updateToNextUser)
+
+
 
   if (!data) {
     return null;
@@ -103,16 +122,21 @@ const Session = () => {
         <Users
           hostId={data.hostId}
           users={data.users}
-          selectedUser={selectedUser}
+          currentUser={currentUser}
           sessionLink={data.sessionLink}
         />
 
         <Container
           questions={data.questions}
+          currentQuestion={currentQuestion}
+          setCurrentQuestion={setCurrentQuestion}
+          updateToNextQuestion={updateToNextQuestion}
+          updateToNextUser={updateToNextUser}
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
           users={data.users}
           sessionUser={sessionUser}
-          selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser}
+          sessionId={sessionId}
           hostId={data.hostId}
         />
       </div>
