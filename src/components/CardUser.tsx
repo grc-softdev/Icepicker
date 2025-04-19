@@ -18,7 +18,6 @@ const CardUser = ({
   hostId,
   avatar,
 }: CardUserProps) => {
-  console.log(avatar)
   return (
     <div
       className={`border w-full h-20 rounded-xl p-3 bg-background flex items-center gap-3 cursor-pointer transition-colors duration-300 

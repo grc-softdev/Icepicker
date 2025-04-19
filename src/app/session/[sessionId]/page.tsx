@@ -75,10 +75,10 @@ const Session = () => {
     fetchSession();
 
      // Set up polling
-     //const interval = setInterval(fetchSession, 2000);
+     const interval = setInterval(fetchSession, 2000);
  
      // Clear interval on unmount or if sessionId changes
-     //return () => clearInterval(interval);
+     return () => clearInterval(interval);
 
   }, [sessionId]);
 
@@ -117,7 +117,6 @@ const Session = () => {
     return null;
   }
 
-  console.log(data)
 
   return (
     <div className="w-full min-h-screen flex flex-col">
@@ -129,15 +128,8 @@ const Session = () => {
         isOpen={!isAlreadyLoggedIn}
       />
       <Navbar />
-      <div className="flex items-center justify-start mx-20">
-        <Users
-          hostId={data.hostId}
-          users={data.users}
-          currentUser={currentUser}
-          sessionLink={data.sessionLink}
-        />
-
-        <Container
+      <div className="flex flex-col md:flex-row-reverse items-center sm:items-center md:items-start justify-center mx-20 gap-6 mt-2 sm:mt-2 md:mt-0"> 
+      <Container
           currentQuestion={currentQuestion}
           setCurrentQuestion={setCurrentQuestion}
           updateToNextQuestion={updateToNextQuestion}
@@ -147,6 +139,14 @@ const Session = () => {
           sessionId={sessionId}
           hostId={data.hostId}
         />
+        <Users
+          hostId={data.hostId}
+          users={data.users}
+          currentUser={currentUser}
+          sessionLink={data.sessionLink}
+        />
+
+        
       </div>
       {error && <div className="text-red-500">{error}</div>}
     </div>

@@ -6,7 +6,6 @@ import { api } from "@/app/services/api";
 const Join = () => {
   const { sessionId } = useParams();
 
-  console.log({sessionId})
   const [sessionName, setSessionName] = useState("");
 
   useEffect(() => {

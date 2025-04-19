@@ -34,7 +34,6 @@ const Home = () => {
  
       setIsAdmin(response.data.isAdmin);
       setError("");
-      console.log(response)
 
       router.push(response.data.sessionLink);
     } catch (err) {

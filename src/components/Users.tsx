@@ -23,16 +23,13 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
     toast("Invite your friends! =)");
     setTimeout(() => setCopied(false), 2000);
   };
-  
-  const avatar = users.map((user) => user.avatar)
-  console.log(avatar)
 
   return (
-    <section className="flex flex-col">
-     
+    <section className="flex flex-col mt-6 sm:mt-6 md:mt-0">
+      <ToastContainer />
 
-      <div className="flex flex-col justify-start min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
-        <ToastContainer />
+      <div className="flex flex-col justify-between min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
+       
         
         <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
           {users?.map((user) => (
@@ -81,7 +78,8 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
             </div>
           </div>
         )}
-      </div>
+        </div>
+     
     </section>
   );
 };
