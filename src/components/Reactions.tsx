@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import { Reaction } from "./Container";
 
 type ReactionsProps = {
   questionId: string;
-  reactions: Record<string, number>;
+  reactions: Reaction[];
   disabledReactions: string[];
   sessionUserId: string;
   onReact: (reactionName: string) => void
@@ -24,26 +24,25 @@ const getEmojiSymbol = (name: string) => {
   }
 };
 
+const emojiOrder = ["thumb", "laugh", "surprise", "heart"];
+
 const Reactions = ({
   onReact,
   reactions,
-  disabledReactions,
 }: ReactionsProps) => {
 
+  const sortedReactions = reactions?.sort((a,b) => emojiOrder.indexOf(a.name) - emojiOrder.indexOf(b.name))
+    
   return (
     <div className="flex gap-4 mt-4 flex-wrap justify-center">
-      {reactions?.map((reaction) => {
-        const isReacted = disabledReactions.includes(reaction.setName);
+      {sortedReactions?.map((reaction) => {
 
         return (
           <button
-            key={reaction.id}
+            key={reaction.name}
             onClick={() => onReact(reaction.name)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-lg transition font-medium ${
-              isReacted
-                ? "bg-blue-300 text-blue-900"
-                : "bg-blue-100 hover:bg-blue-200 text-blue-800"
-            }`}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-lg transition font-medium bg-background text-blue-900"
+            
           >
             {getEmojiSymbol(reaction.name)}
             <span className="text-sm">{reaction.amount}</span>

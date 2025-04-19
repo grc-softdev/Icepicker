@@ -11,6 +11,7 @@ type UsersProps = {
   userId: string;
   currentUser: User;
   sessionLink: string;
+  avatar: string;
 };
 
 const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
@@ -22,6 +23,9 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
     toast("Invite your friends! =)");
     setTimeout(() => setCopied(false), 2000);
   };
+  
+  const avatar = users.map((user) => user.avatar)
+  console.log(avatar)
 
   return (
     <section className="flex flex-col">
@@ -31,15 +35,17 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
         <ToastContainer />
         
         <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
-          {users.map((user) => (
-            <div key={user.id}>
-              <CardUser
-                name={user.name}
-                hostId={hostId}
-                userId={user.id}
-                isCurrent={currentUser?.id === user.id}
-              />
-            </div>
+          {users?.map((user) => (
+             <div key={user.id}>
+             <CardUser
+               name={user.name}
+               avatar={user.avatar}
+               hostId={hostId}
+               userId={user.id}
+               isCurrent={currentUser?.id === user.id}
+             />
+           </div>
+          
           ))}
         </div>
 

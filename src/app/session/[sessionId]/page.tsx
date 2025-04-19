@@ -12,6 +12,7 @@ export type User = {
   id: string;
   name: string;
   role: 'HOST' | "GUEST"
+  avatar: string;
 };
 
 export type Data = {
@@ -56,15 +57,15 @@ const Session = () => {
         setCurrentUser(res.data.currentUser)
         setCurrentQuestion(res.data.currentQuestion)
 
-        const localUserName = localStorage.getItem("name")
-          const getUser = res.data.users.find((user) => user.name === localUserName)
-          if (getUser) {
-            setSessionUser(getUser)
-          } else {
-            console.warn("user nao encontado")
-          }
+        // const localUserName = localStorage.getItem("name")
+        //   const getUser = res.data.users.find((user) => user.name === localUserName)
+        //   if (getUser) {
+        //     setSessionUser(getUser)
+        //   } else {
+        //     console.warn("user nao encontado")
+        //   }
 
-        setError("");
+        // setError("");
 
       } catch (err) {
         setError("Error. Try Again");
@@ -72,6 +73,12 @@ const Session = () => {
     };
   
     fetchSession();
+
+     // Set up polling
+     //const interval = setInterval(fetchSession, 2000);
+ 
+     // Clear interval on unmount or if sessionId changes
+     //return () => clearInterval(interval);
 
   }, [sessionId]);
 
@@ -105,11 +112,12 @@ const Session = () => {
     }
   };
 
-  console.log(data)
 
   if (!data) {
     return null;
   }
+
+  console.log(data)
 
   return (
     <div className="w-full min-h-screen flex flex-col">

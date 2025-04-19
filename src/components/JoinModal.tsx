@@ -21,11 +21,12 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
     if (!joinName.trim()) return;
 
     try {
-      await api.put(`/session/${sessionId}`, { name: joinName, sessionId });
+      await api.put(`/session/${sessionId}`, { name: joinName});
 
       setName(joinName);
 
       router.push(`/session/${sessionId}`);
+      console.error("JoinSession error:", error);
     } catch (err) {
       setError("Failed to join session. Try again.");
     }

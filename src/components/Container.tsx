@@ -29,14 +29,14 @@ export type question = {
   id: string;
   isCurrent?: boolean;
   reactions: Reaction[];
-}
+};
 
 export type Reaction = {
-  name: string,
-  amount: number,
-  sessionId: string,
-  users: User[]
-}
+  name: string;
+  amount: number;
+  sessionId: string;
+  users: User[];
+};
 
 const Container = ({
   currentQuestion,
@@ -51,18 +51,11 @@ const Container = ({
   const [userReactions, setUserReactions] = useState<
     Record<string, Record<string, string[]>>
   >({});
-  console.log(sessionId)
+
   const onReact = async (reactionName: string) => {
     if (!sessionUser?.id || !currentQuestion?.id) {
       return;
     }
-
-    console.log("sending reaction" , {
-      userId: sessionUser?.id,
-      questionId: currentQuestion.id,
-      name: reactionName,
-      sessionId: sessionId
-    })
 
     try {
       const res = await api.post(`/session/${sessionId}/toggle`, {
@@ -74,44 +67,50 @@ const Container = ({
 
       const updateReactions = res?.data?.reactions;
 
-if (!Array.isArray(updateReactions)) {
-  console.error("updateReactions não é um array:", updateReactions);
-  return;
-}
+      if (!Array.isArray(updateReactions)) {
+        console.error("updateReactions não é um array:", updateReactions);
+        return;
+      }
 
-setCurrentQuestion((prev) => ({
-  ...prev,
-  reactions: updateReactions,
-}));
+      setCurrentQuestion((prev) => ({
+        ...prev,
+        reactions: updateReactions,
+      }));
 
-const foundReaction = updateReactions.find((react) => react.name === reactionName);
+      const foundReaction = updateReactions.find(
+        (react) => react.name === reactionName
+      );
 
-const reactionDetected = foundReaction?.users?.map((usr) => usr.id) ?? [];
+      const reactionDetected = foundReaction?.users?.map((usr) => usr.id) ?? [];
 
-setUserReactions((prev) => ({
-  ...prev,
-  [currentQuestion.id]: {
-    ...prev[currentQuestion.id],
-    [sessionUser.id]: reactionDetected,
-  },
-}));
+      setUserReactions((prev) => ({
+        ...prev,
+        [currentQuestion.id]: {
+          ...prev[currentQuestion.id],
+          [sessionUser.id]: reactionDetected,
+        },
+      }));
     } catch (err) {
       console.error("Erro desconhecido:", err);
     }
   };
-  console.log(onReact);
 
+  console.log(currentUser)
+
+  const BASE_URL = process.env.NEXT_PUBLIC_API
+  const imagePath = '/files' + currentUser.avatar
+  const imageURL = BASE_URL + imagePath
   return (
     <section className="flex items-center justify-center lg:mt-[-90px] py-10 px-4 w-full">
       <div className="max-w-md w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <Link href="/">
-          <Image
-            src={user1}
+         {currentUser &&(<Image
+            src={imageURL}
             width={80}
             height={80}
             alt="user"
             className="rounded-full cursor-pointer"
-          />
+          />)}
         </Link>
 
         {currentUser && (
@@ -120,16 +119,12 @@ setUserReactions((prev) => ({
           </h2>
         )}
 
-        {
-          <Reactions
-            questionId={currentQuestion?.id}
-            reactions={currentQuestion?.reactions}
-            disabledReactions={
-              userReactions[currentQuestion.id]?.[sessionUser.id] || []
-            }
-            onReact={onReact}
-          />
-        }
+        <Reactions
+          questionId={currentQuestion?.id}
+          reactions={currentQuestion?.reactions}
+          onReact={onReact}
+        />
+
         {currentQuestion && (
           <div className="w-full">
             <h2 className="mt-8 text-lg font-semibold p-4 text-center text-gray-800">
