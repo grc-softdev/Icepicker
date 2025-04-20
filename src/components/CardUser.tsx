@@ -1,6 +1,5 @@
-import { capFirstLetter } from "@/utils/format";
+import { capFirstLetter, userAvatar } from "@/utils/format";
 import Image from "next/image";
-import user2 from "../app/assets/user2.webp";
 import React from "react";
 
 export type CardUserProps = {
@@ -29,7 +28,7 @@ const CardUser = ({
     >
       {avatar && (
         <Image
-          src={`http://localhost:3333/files${avatar.replace("/avatars", "")}`}
+          src={userAvatar(avatar)}
           width={50}
           height={50}
           alt="avatar"

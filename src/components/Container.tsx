@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { User } from "@/app/session/[sessionId]/page";
-import { capFirstLetter } from "../utils/format";
+import { capFirstLetter, userAvatar } from "../utils/format";
 import Reactions from "./Reactions";
 import { api } from "@/app/services/api";
 
@@ -26,7 +26,6 @@ export type QuestionsProps = {
 export type question = {
   name: string;
   id: string;
-  isCurrent?: boolean;
   reactions: Reaction[];
 };
 
@@ -67,7 +66,6 @@ const Container = ({
       const updateReactions = res?.data?.reactions;
 
       if (!Array.isArray(updateReactions)) {
-        
         return;
       }
 
@@ -80,7 +78,8 @@ const Container = ({
         (react) => react.name === reactionName
       );
 
-      const reactionDetected = foundReaction?.users?.map((user) => user.id) ?? [];
+      const reactionDetected =
+        foundReaction?.users?.map((user) => user.id) ?? [];
 
       setUserReactions((prev) => ({
         ...prev,
@@ -94,25 +93,21 @@ const Container = ({
     }
   };
 
-  const BASE_URL = process.env.NEXT_PUBLIC_API
-  const imagePath = '/files' + currentUser.avatar
-  const imageURL = BASE_URL + imagePath
   return (
     <section className="flex items-center justify-center px-1 md:px-2 lg:px-4 w-[348px] h-[100%] lg:w-full">
       <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <Link href="/">
-         {currentUser &&(
-          <div className="w-full h-[80px] sm:h-80px md-[90px] lg-[96px] mb-2">
-          <Image
-            src={imageURL}
-            width={100}
-            height={100}
-            alt="user"
-            className="rounded-full cursor-pointer"
-
-          />
-          </div>)}
-          
+          {currentUser && (
+            <div className="w-full h-[80px] sm:h-80px md-[90px] lg-[96px] mb-2">
+              <Image
+                src={userAvatar(currentUser.avatar)}
+                width={100}
+                height={100}
+                alt="user"
+                className="rounded-full cursor-pointer"
+              />
+            </div>
+          )}
         </Link>
 
         {currentUser && (
@@ -121,20 +116,17 @@ const Container = ({
           </h2>
         )}
 
-        <Reactions
-          reactions={currentQuestion?.reactions}
-          onReact={onReact}
-        />
+        <Reactions reactions={currentQuestion?.reactions} onReact={onReact} />
 
         {currentQuestion && (
           <div className="w-full">
-            <h2 className="mt-6 lg:text-lg font-semibold p-3 text-center text-gray-800">
+            <h2 className="mt-6 md:text-lg lg:text-xl xl:text-2xl font-semibold p-3 text-center text-gray-800">
               {currentQuestion.name}
             </h2>
           </div>
         )}
 
-        {sessionUser && (
+        {sessionUser?.id === hostId && (
           <div className="w-full flex sm:flex-col items-center justify-center gap-4 mt-4 sm:mt-4 md:mt-6">
             <button
               onClick={updateToNextUser}

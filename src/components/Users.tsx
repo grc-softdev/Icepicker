@@ -5,13 +5,10 @@ import { toast, ToastContainer } from "react-toastify";
 import { GoCopy } from "react-icons/go";
 
 type UsersProps = {
-  hostName: string;
   users: User[];
   hostId: string;
-  userId: string;
   currentUser: User;
   sessionLink: string;
-  avatar: string;
 };
 
 const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
@@ -27,22 +24,18 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
   return (
     <section className="flex flex-col mt-6 sm:mt-6 md:mt-0">
       <ToastContainer />
-
       <div className="flex flex-col justify-between min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
-       
-        
         <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
           {users?.map((user) => (
-             <div key={user.id}>
-             <CardUser
-               name={user.name}
-               avatar={user.avatar}
-               hostId={hostId}
-               userId={user.id}
-               isCurrent={currentUser?.id === user.id}
-             />
-           </div>
-          
+            <div key={user.id}>
+              <CardUser
+                name={user.name}
+                avatar={user.avatar}
+                hostId={hostId}
+                userId={user.id}
+                isCurrent={currentUser?.id === user.id}
+              />
+            </div>
           ))}
         </div>
 
@@ -63,7 +56,9 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
                     : "bg-blue-500 text-white hover:bg-blue-600"
                 }`}
               >
-                {!copied ? <GoCopy /> : (
+                {!copied ? (
+                  <GoCopy />
+                ) : (
                   <svg
                     className="w-4 h-4 text-white"
                     fill="none"
@@ -78,8 +73,7 @@ const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
             </div>
           </div>
         )}
-        </div>
-     
+      </div>
     </section>
   );
 };

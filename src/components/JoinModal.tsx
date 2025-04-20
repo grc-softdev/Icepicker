@@ -21,12 +21,14 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
     if (!joinName.trim()) return;
 
     try {
+      
+      console.log({joinName, sessionId})
+
       await api.put(`/session/${sessionId}`, { name: joinName});
 
       setName(joinName);
 
       router.push(`/session/${sessionId}`);
-      console.error("JoinSession error:", error);
     } catch (err) {
       setError("Failed to join session. Try again.");
     }
@@ -37,7 +39,7 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
   }
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center">
+    <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center z-50">
       <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-background rounded-lg p-6">
         <form onSubmit={handleJoinSession}>
           <div className="flex items-center justify-center">
@@ -51,7 +53,7 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
           <input
             type="text"
             id="userName"
-            placeholder="username"
+            placeholder="Username"
             value={joinName}
             onChange={(e) => setJoinName(e.target.value)}
             className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
