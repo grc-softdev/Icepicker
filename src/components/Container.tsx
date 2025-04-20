@@ -7,14 +7,16 @@ import { User } from "@/app/session/[sessionId]/page";
 import { capFirstLetter, userAvatar } from "../utils/format";
 import Reactions from "./Reactions";
 import { api } from "@/app/services/api";
+import { RootState } from "@/state/redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentQuestion } from "@/state";
 
 export type QuestionsProps = {
   questions: question[];
   users: User[];
-  CurrentUser: User;
+ 
   setCurrentUser: React.Dispatch<React.SetStateAction<User>>;
-  currentQuestion: question;
-  setCurrentQuestion: React.Dispatch<React.SetStateAction<question>>;
+  
   updateToNextQuestion: () => void;
   updateToNextUser: () => void;
   currentUser: User;
@@ -37,18 +39,15 @@ export type Reaction = {
 };
 
 const Container = ({
-  currentQuestion,
-  setCurrentQuestion,
   updateToNextUser,
   updateToNextQuestion,
-  currentUser,
   sessionUser,
   sessionId,
   hostId,
 }: QuestionsProps) => {
-  const [userReactions, setUserReactions] = useState<
-    Record<string, Record<string, string[]>>
-  >({});
+  const dispatch = useDispatch();
+  const { currentQuestion, currentUser } = useSelector((state: RootState) => state.session);
+  const [userReactions, setUserReactions] = useState<Record<string, Record<string, string[]>>>({});
 
   const onReact = async (reactionName: string) => {
     if (!sessionUser?.id || !currentQuestion?.id) {
@@ -69,9 +68,9 @@ const Container = ({
         return;
       }
 
-      setCurrentQuestion((prev) => ({
-        ...prev,
-        reactions: updateReactions,
+      dispatch(setCurrentQuestion({
+        ...currentQuestion,
+        reactions: updateReactions
       }));
 
       const foundReaction = updateReactions.find(

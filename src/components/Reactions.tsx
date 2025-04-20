@@ -43,7 +43,7 @@ const Reactions = ({ onReact, reactions }: ReactionsProps) => {
     }, 1500);
   };
 
-  const sortedReactions = reactions?.sort(
+  const sortedReactions = [...(reactions ?? [])].sort(
     (a, b) => emojiOrder.indexOf(a.name) - emojiOrder.indexOf(b.name)
   );
 

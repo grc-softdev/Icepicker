@@ -2,9 +2,11 @@
 import Image from "next/image";
 import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { api } from "./services/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { RootState } from "@/state/redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setError } from "@/state";
 
 type SessionResp = {
   sessionLink: string;
@@ -12,24 +14,24 @@ type SessionResp = {
 
 const Home = () => {
   const [name, setName] = useLocalStorage<string>("name", "");
-  const [error, setError] = useState<string>("");
-  
+  const dispatch = useDispatch();
+  const { error } = useSelector((state: RootState) => state.session);
   const router = useRouter();
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!name) {
-      setError("name is required");
+      (setError("name is required"));
       return;
     }
 
     try {
       const response = await api.post<SessionResp>("/session", { name });
-      setError("");
+      dispatch(setError(""));
       router.push(response.data.sessionLink);
     } catch (err) {
-      setError("Error. Try Again");
+      dispatch(setError("Error. Try Again"));
     }
   };
 
@@ -46,22 +48,13 @@ const Home = () => {
             onChange={(e) => setName(e.target.value)}
             className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-4 relative -left-[1px]"
           />
-
-          {/* <input
-            type="text"
-            required
-            placeholder="Room name"
-            className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
-          /> */}
-
-          {error && <p className="text-red-500 mb-2">{error}</p>}
-
           <button
             className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
             type="submit"
           >
             Create Room
           </button>
+          {error && <p className="text-red-500 mb-2">{error}</p>}
         </form>
       </section>
     </div>

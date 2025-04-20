@@ -3,16 +3,23 @@ import Image from "next/image";
 import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/state/redux";
+import { setError } from "@/state";
 
 type JoinProps = {
   sessionId: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
-  setError: (error: string) => void;
-  error: string;
   isOpen: boolean;
 };
 
-const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) => {
+const JoinModal = ({
+  sessionId,
+  setName,
+  isOpen,
+}: JoinProps) => {
+  const dispatch = useDispatch();
+  const {  error } = useSelector((state: RootState) => state.session);
   const [joinName, setJoinName] = useState("");
   const router = useRouter();
 
@@ -21,21 +28,20 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
     if (!joinName.trim()) return;
 
     try {
-      
-      console.log({joinName, sessionId})
+      console.log({ joinName, sessionId });
 
-      await api.put(`/session/${sessionId}`, { name: joinName});
+      await api.put(`/session/${sessionId}`, { name: joinName });
 
       setName(joinName);
 
       router.push(`/session/${sessionId}`);
     } catch (err) {
-      setError("Failed to join session. Try again.");
+      dispatch(setError("Failed to join session. Try again."));
     }
   };
 
   if (!isOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -43,12 +49,12 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
       <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-background rounded-lg p-6">
         <form onSubmit={handleJoinSession}>
           <div className="flex items-center justify-center">
-          <Image
-            src={nav}
-            alt="logo"
-            width={200}
-            className="cursor-pointer flex items-center justify-center"
-          />
+            <Image
+              src={nav}
+              alt="logo"
+              width={200}
+              className="cursor-pointer flex items-center justify-center"
+            />
           </div>
           <input
             type="text"
@@ -75,4 +81,3 @@ const JoinModal = ({ sessionId, setError, error, setName, isOpen }: JoinProps) =
 };
 
 export default JoinModal;
-

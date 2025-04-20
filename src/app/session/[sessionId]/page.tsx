@@ -1,21 +1,5 @@
 "use client";
-// session name
-// performance do thumbs
-// aih tem esse bug da volta
-// ajeitar o azulzinho do selected
-
-// em vez de go to room, create a room qnd for na homepage, e join na hora do modal
-// a cor do texto tem q ser algo normal, preto
-// talvez diminuir um tiquinho de nada a cor do azul da border
-// colocar 3 pontinhos no link pra n ser scrollavel
-
-// overall:
-// refatorar, por redux
-// por AI
-// por websockets
-// appcues
-
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Users from "@/components/Users";
@@ -23,6 +7,9 @@ import Container, { Reaction } from "@/components/Container";
 import { api } from "@/app/services/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import JoinModal from "@/components/JoinModal";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/state/redux";
+import { setCurrentQuestion, setCurrentUser, setData, setError } from "@/state";
 
 export type User = {
   id: string;
@@ -49,16 +36,15 @@ type Question = {
 
 const Session = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
-  const [error, setError] = useState<string>("");
 
+  const dispatch = useDispatch();
+  const { data, currentQuestion, currentUser, error } = useSelector((state: RootState) => state.session);
   const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
 
   const defaultUser = cachedUserName || "";
 
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
-  const [data, setData] = useState<Data | null>(null);
-  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  
   const isAlreadyLoggedIn = name?.length !== 0;
 
   useEffect(() => {
@@ -67,11 +53,10 @@ const Session = () => {
     const fetchSession = async () => {
       try {
         const res = await api.get<Data>(`/session/${sessionId}`);
-        setData(res.data);
-        setCurrentUser(res.data.currentUser);
-        setCurrentQuestion(res.data.currentQuestion);
+        dispatch(setData(res.data));
+       
       } catch (error) {
-        setError("Error. Try Again");
+        dispatch(setError("Error. Try Again"));
       }
     };
 
@@ -89,7 +74,7 @@ const Session = () => {
   const updateToNextQuestion = async () => {
     try {
       const res = await api.put(`/session/${sessionId}/next-question`);
-      setCurrentQuestion(res.data.currentQuestion);
+      dispatch(setCurrentQuestion(res.data.currentQuestion));
     } catch (err) {
       console.log("Error:", err);
     }
@@ -98,7 +83,7 @@ const Session = () => {
   const updateToNextUser = async () => {
     try {
       const res = await api.put(`/session/${sessionId}/next-user`);
-      setCurrentUser(res.data.currentUser);
+      dispatch(setCurrentUser(res.data.currentUser));
     } catch (err) {
       console.error("Erro desconhecido:", err);
     }
@@ -120,11 +105,8 @@ const Session = () => {
       <Navbar />
       <div className="flex flex-col md:flex-row-reverse items-center sm:items-center md:items-start justify-center mx-20 gap-6 mt-2 sm:mt-2 md:mt-0">
         <Container
-          currentQuestion={currentQuestion}
-          setCurrentQuestion={setCurrentQuestion}
           updateToNextQuestion={updateToNextQuestion}
           updateToNextUser={updateToNextUser}
-          currentUser={currentUser}
           sessionUser={sessionUser}
           sessionId={sessionId}
           hostId={data.hostId}
