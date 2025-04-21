@@ -20,7 +20,6 @@ export type User = {
 
 export type Data = {
   sessionLink: string;
-  hostId: string;
   userId: string;
   currentQuestion: Question;
   currentUser: User;
@@ -36,6 +35,7 @@ type Question = {
 };
 
 const Session = () => {
+  
   const { sessionId } = useParams<{ sessionId: string }>();
   const dispatch = useDispatch();
   const { data, error } = useSelector((state: RootState) => state.session);
@@ -49,6 +49,28 @@ const Session = () => {
   const [loading, setLoading] = useState(true);
   const [sessionUser, setSessionUser] = useState<User | null>(null);
 
+
+  const isFirstUser = data?.users?.[0]?.id === sessionUser?.id;
+  
+  const updateToNextQuestion = async () => {
+    try {
+      const res = await api.put(`/session/${sessionId}/next-question`);
+      dispatch(setCurrentQuestion(res.data.currentQuestion));
+    } catch (err) {
+      console.error("Error", err);
+    }
+  };
+
+  const updateToNextUser = async () => {
+    try {
+      const res = await api.put(`/session/${sessionId}/next-user`);
+      dispatch(setCurrentUser(res.data.currentUser));
+    } catch (err) {
+      console.error("Error", err);
+    }
+  };
+
+
   useEffect(() => {
     if (!sessionId) return;
 
@@ -57,16 +79,14 @@ const Session = () => {
         const res = await api.get<Data>(`/session/${sessionId}`);
         dispatch(setData(res.data));
 
-        // Busca o usuário correspondente ao nome salvo no localStorage
-        const foundUser = res.data.users.find((user) => user.name === name);
+        const foundUser = res.data.users.find((user) => {
+          return user.name === name
+        });
         setSessionUser(foundUser || null);
-        console.log(res.data)
-        console.log(foundUser)
         setLoading(false);
 
-  console.log("API Response:", res);
       } catch (error) {
-        dispatch(setError("Erro ao carregar a sessão. Tente novamente."));
+        dispatch(setError("Error. Try Again"));
         setLoading(false);
       }
     };
@@ -76,29 +96,42 @@ const Session = () => {
     return () => clearInterval(interval);
   }, [sessionId, name, dispatch]);
 
-  const isFirstUser = data?.users?.[0]?.id === sessionUser?.id;
+  useEffect(() => {
+    const onClosing = async (event: BeforeUnloadEvent) => {
+      event.preventDefault()
 
+      try {
+        const payload = JSON.stringify({
+          sessionId,
+          userId: sessionUser?.id,
+        });
+
+        const leaveEndpoint = `${process.env.NEXT_PUBLIC_API}/session/${sessionId}/leave`
+
+        fetch(`${leaveEndpoint}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: payload,
+          keepalive: true,
+        });
+      
+        localStorage.removeItem("name");
+      } catch (error) {
+        console.error("Erro ao sair da sala", error);
+      }
+    };
   
-  const updateToNextQuestion = async () => {
-    try {
-      const res = await api.put(`/session/${sessionId}/next-question`);
-      dispatch(setCurrentQuestion(res.data.currentQuestion));
-    } catch (err) {
-      console.error("Erro ao mudar para a próxima pergunta:", err);
-    }
-  };
-
-  const updateToNextUser = async () => {
-    try {
-      const res = await api.put(`/session/${sessionId}/next-user`);
-      dispatch(setCurrentUser(res.data.currentUser));
-    } catch (err) {
-      console.error("Erro ao mudar para o próximo usuário:", err);
-    }
-  };
+    window.addEventListener("beforeunload", onClosing);
+  
+    return () => {
+      window.removeEventListener("beforeunload", onClosing);
+    };
+  }, [sessionUser?.id]);
 
   if (loading || !data) {
-    return <div>Carregando sessão...</div>;
+    return <div>Loading...</div>;
   }
 
   if (!sessionUser || !isAlreadyLoggedIn) {
@@ -110,6 +143,8 @@ const Session = () => {
       />
     );
   }
+  
+
 
   return (
     <div className="w-full min-h-screen flex flex-col">
@@ -125,11 +160,9 @@ const Session = () => {
           updateToNextUser={updateToNextUser}
           sessionUser={sessionUser}
           sessionId={sessionId}
-          hostId={data.hostId}
           isFirstUser={isFirstUser}
         />
         <Users
-          hostId={data.hostId}
           users={data.users}
           sessionLink={data.sessionLink}
         />

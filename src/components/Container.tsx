@@ -11,16 +11,14 @@ import { RootState } from "@/state/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentQuestion } from "@/state";
 
-export type QuestionsProps = {
+export type ContainerProps = {
   questions: question[];
   users: User[];
- 
   setCurrentUser: React.Dispatch<React.SetStateAction<User>>;
-  
   updateToNextQuestion: () => void;
   updateToNextUser: () => void;
+  isFirstUser: User;
   currentUser: User;
-  hostId: string;
   sessionUser: User;
   sessionId: string;
 };
@@ -44,8 +42,8 @@ const Container = ({
   isFirstUser,
   sessionUser,
   sessionId,
-  hostId,
-}: QuestionsProps) => {
+
+}: ContainerProps) => {
   const dispatch = useDispatch();
   const { currentQuestion, currentUser } = useSelector((state: RootState) => state.session);
   const [userReactions, setUserReactions] = useState<Record<string, Record<string, string[]>>>({});

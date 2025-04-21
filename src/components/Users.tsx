@@ -8,11 +8,10 @@ import { RootState } from "@/state/redux";
 
 type UsersProps = {
   users: User[];
-  hostId: string;
   sessionLink: string;
 };
 
-const Users = ({ hostId, users, sessionLink }: UsersProps) => {
+const Users = ({ users, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
   const { currentUser } = useSelector((state: RootState) => state.session);
 
@@ -33,7 +32,6 @@ const Users = ({ hostId, users, sessionLink }: UsersProps) => {
               <CardUser
                 name={user.name}
                 avatar={user.avatar}
-                hostId={hostId}
                 userId={user.id}
                 isCurrent={currentUser?.id === user.id}
               />
@@ -47,7 +45,7 @@ const Users = ({ hostId, users, sessionLink }: UsersProps) => {
               <input
                 type="text"
                 className="flex-1 px-3 py-2 text-sm text-gray-600 bg-transparent focus:outline-none"
-                value={sessionLink}
+                value={`${sessionLink.substring(0, 32)}...`}
                 readOnly
               />
               <button

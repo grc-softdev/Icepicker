@@ -1,10 +1,11 @@
+import { RootState } from "@/state/redux";
 import { capFirstLetter, userAvatar } from "@/utils/format";
 import Image from "next/image";
 import React from "react";
+import { useSelector } from "react-redux";
 
 export type CardUserProps = {
   name: string;
-  hostId: string;
   userId: string;
   isCurrent: boolean;
   avatar: string;
@@ -14,9 +15,9 @@ const CardUser = ({
   name,
   isCurrent,
   userId,
-  hostId,
   avatar,
 }: CardUserProps) => {
+  const { hostId } = useSelector((state: RootState) => state.session);
   return (
     <div
       className={`border w-full h-20 rounded-xl p-3 bg-background flex items-center gap-3 cursor-pointer transition-colors duration-300 
