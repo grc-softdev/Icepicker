@@ -15,8 +15,7 @@ const Navbar = ({ sessionId, sessionUser }: NavbarProps) => {
   const router = useRouter();
 
   const handleLeaveRoom = async () => {
-    const confirmed = window.confirm("Do you really want to leave the room?");
-    if (!confirmed) return;
+  
     try {
       await api.put(`session/${sessionId}/leave`, {
         sessionId,
@@ -35,7 +34,7 @@ const Navbar = ({ sessionId, sessionUser }: NavbarProps) => {
     <div className="flex items-center justify-between mx-20 lg:mb-0 xl:mb-4">
       <Image src={nav} width={120} height={90} alt="logo" />
       <div onClick={handleLeaveRoom}>
-        <VscSignOut className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"/>
+        <VscSignOut className="w-8 h-7 text-marine rounded-md hover:text-greenblue"/>
       </div>
     </div>
   );

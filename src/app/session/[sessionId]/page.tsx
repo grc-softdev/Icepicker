@@ -49,7 +49,6 @@ const Session = () => {
   const [loading, setLoading] = useState(true);
   const [sessionUser, setSessionUser] = useState<User | null>(null);
 
-
   const isFirstUser = data?.users?.[0]?.id === sessionUser?.id;
   
   const updateToNextQuestion = async () => {
@@ -57,16 +56,16 @@ const Session = () => {
       const res = await api.put(`/session/${sessionId}/next-question`);
       dispatch(setCurrentQuestion(res.data.currentQuestion));
     } catch (err) {
-      console.error("Error", err);
+      console.log("Error", err);
     }
   };
 
   const updateToNextUser = async () => {
     try {
       const res = await api.put(`/session/${sessionId}/next-user`);
-      dispatch(setCurrentUser(res.data.currentUser));
+      dispatch(setCurrentUser({...res.data.currentUser}));
     } catch (err) {
-      console.error("Error", err);
+      console.log("Error", err);
     }
   };
 
@@ -79,11 +78,16 @@ const Session = () => {
         const res = await api.get<Data>(`/session/${sessionId}`);
         dispatch(setData(res.data));
 
-        const foundUser = res.data.users.find((user) => {
-          return user.name === name
-        });
+        const foundUser = res.data.users.find((user) => user.name === name);
         setSessionUser(foundUser || null);
         setLoading(false);
+
+        const currentUserStills = res.data.users.some((user) => user.id === res.data.currentUser?.id)
+        
+        if(!currentUserStills){
+          const resNext = await api.put(`/session/${sessionId}/next-user`);
+          dispatch(setCurrentUser(resNext.data.currentUser));
+        }
 
       } catch (error) {
         dispatch(setError("Error. Try Again"));

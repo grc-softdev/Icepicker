@@ -14,11 +14,9 @@ import { setCurrentQuestion } from "@/state";
 export type ContainerProps = {
   questions: question[];
   users: User[];
-  setCurrentUser: React.Dispatch<React.SetStateAction<User>>;
   updateToNextQuestion: () => void;
   updateToNextUser: () => void;
   isFirstUser: User;
-  currentUser: User;
   sessionUser: User;
   sessionId: string;
 };
@@ -42,7 +40,6 @@ const Container = ({
   isFirstUser,
   sessionUser,
   sessionId,
-
 }: ContainerProps) => {
   const dispatch = useDispatch();
   const { currentQuestion, currentUser } = useSelector((state: RootState) => state.session);

@@ -28,8 +28,6 @@ const JoinModal = ({
     if (!joinName.trim()) return;
 
     try {
-      console.log({ joinName, sessionId });
-
       await api.put(`/session/${sessionId}`, { name: joinName });
 
       setName(joinName);
