@@ -3,16 +3,18 @@ import CardUser from "./CardUser";
 import { User } from "@/app/session/[sessionId]/page";
 import { toast, ToastContainer } from "react-toastify";
 import { GoCopy } from "react-icons/go";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/redux";
 
 type UsersProps = {
   users: User[];
   hostId: string;
-  currentUser: User;
   sessionLink: string;
 };
 
-const Users = ({ hostId, users, currentUser, sessionLink }: UsersProps) => {
+const Users = ({ hostId, users, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
+  const { currentUser } = useSelector((state: RootState) => state.session);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(sessionLink || "");

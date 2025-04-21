@@ -41,6 +41,7 @@ export type Reaction = {
 const Container = ({
   updateToNextUser,
   updateToNextQuestion,
+  isFirstUser,
   sessionUser,
   sessionId,
   hostId,
@@ -125,7 +126,7 @@ const Container = ({
           </div>
         )}
 
-        {sessionUser?.id === hostId && (
+        {isFirstUser && (
           <div className="w-full flex sm:flex-col items-center justify-center gap-4 mt-4 sm:mt-4 md:mt-6">
             <button
               onClick={updateToNextUser}
