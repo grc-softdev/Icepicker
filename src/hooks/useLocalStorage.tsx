@@ -12,7 +12,7 @@ function useLocalStorage<T>(key: string, defaultValue: T | (() => T)) {
         setValue(JSON.parse(jsonValue));
       }
     } catch (error) {
-      console.error("Erro ao ler do localStorage", error);
+      console.log("Erro ao ler do localStorage", error);
     }
 
   }, [key]);

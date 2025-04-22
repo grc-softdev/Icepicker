@@ -10,6 +10,7 @@ import JoinModal from "@/components/JoinModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
 import { setCurrentQuestion, setCurrentUser, setData, setError } from "@/state";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export type User = {
   id: string;
@@ -90,7 +91,7 @@ const Session = () => {
         }
 
       } catch (error) {
-        dispatch(setError("Error. Try Again"));
+        console.log("Error. Try Again");
         setLoading(false);
       }
     };
@@ -123,7 +124,7 @@ const Session = () => {
       
         localStorage.removeItem("name");
       } catch (error) {
-        console.error("Erro ao sair da sala", error);
+        console.log("Error to leave", error);
       }
     };
   
@@ -135,7 +136,7 @@ const Session = () => {
   }, [sessionUser?.id]);
 
   if (loading || !data) {
-    return <div>Loading...</div>;
+    return <div><AiOutlineLoading3Quarters /></div>;
   }
 
   if (!sessionUser || !isAlreadyLoggedIn) {

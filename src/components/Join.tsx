@@ -15,7 +15,7 @@ const Join = () => {
         const response = await api.get(`/get-session/${sessionId}`);
         setSessionName(response.data.sessionName);
       } catch (err) {
-        console.error("Error fetching session data", err);
+        console.log("Error fetching session data", err);
       }
     };
 

@@ -24,7 +24,7 @@ const Navbar = ({ sessionId, sessionUser }: NavbarProps) => {
       localStorage.removeItem("name");
       router.push("/");
     } catch (error) {
-      console.error("Erro ao sair da sala", error);
+      console.log("Error to leave", error);
     }
   };
 

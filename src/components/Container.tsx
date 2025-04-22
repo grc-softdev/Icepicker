@@ -10,6 +10,7 @@ import { api } from "@/app/services/api";
 import { RootState } from "@/state/redux";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentQuestion } from "@/state";
+import ModifyQuestions from "./ModifyQuestion";
 
 export type ContainerProps = {
   questions: question[];
@@ -84,7 +85,7 @@ const Container = ({
         },
       }));
     } catch (err) {
-      console.error("Erro desconhecido:", err);
+      console.log("unknown error:", err);
     }
   };
 
@@ -106,7 +107,7 @@ const Container = ({
         </Link>
 
         {currentUser && (
-          <h2 className="mt-6 md:mt-8 lg:mt-10 xl:mt-12 text-xl lg:text-2xl font-black text-center mb-2 lg:mb-4 xl:mb-6">
+          <h2 className="mt-6 md:mt-8 lg:mt-8 text-xl lg:text-2xl font-black text-center mb-2 ">
             {capFirstLetter(currentUser?.name)}
           </h2>
         )}
@@ -115,13 +116,17 @@ const Container = ({
 
         {currentQuestion && (
           <div className="w-full">
-            <h2 className="mt-6 md:text-lg lg:text-xl xl:text-2xl font-semibold p-3 text-center text-gray-800">
+            <h2 className="mt-4 md:text-lg lg:text-xl xl:text-2xl font-semibold p-3 text-center text-gray-800 mb-2 lg:mb-4">
               {currentQuestion.name}
             </h2>
           </div>
         )}
+        {isFirstUser && (
+          <ModifyQuestions/>
+        )}
 
         {isFirstUser && (
+          
           <div className="w-full flex sm:flex-col items-center justify-center gap-4 mt-4 sm:mt-4 md:mt-6">
             <button
               onClick={updateToNextUser}

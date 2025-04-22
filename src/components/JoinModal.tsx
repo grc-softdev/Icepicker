@@ -3,9 +3,6 @@ import Image from "next/image";
 import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/state/redux";
-import { setError } from "@/state";
 
 type JoinProps = {
   sessionId: string;
@@ -18,8 +15,6 @@ const JoinModal = ({
   setName,
   isOpen,
 }: JoinProps) => {
-  const dispatch = useDispatch();
-  const {  error } = useSelector((state: RootState) => state.session);
   const [joinName, setJoinName] = useState("");
   const router = useRouter();
 
@@ -34,7 +29,7 @@ const JoinModal = ({
 
       router.push(`/session/${sessionId}`);
     } catch (err) {
-      dispatch(setError("Failed to join session. Try again."));
+      console.log("Failed to join session.");
     }
   };
 
@@ -63,9 +58,6 @@ const JoinModal = ({
             className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
             required
           />
-
-          {error && <p className="text-red-500 mb-2">{error}</p>}
-
           <button
             className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
             type="submit"
