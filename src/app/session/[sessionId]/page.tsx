@@ -10,7 +10,6 @@ import JoinModal from "@/components/JoinModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
 import { initSocket, setData, setLoading } from "@/state";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export type User = {
   id: string;
@@ -43,16 +42,16 @@ const Session = () => {
   const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
   const defaultUser = cachedUserName || "";
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
-  const [sessionUser, setSessionUser] = useState<User | null>(null);
 
-  const isUserInSession = data?.users?.some((user) => user.name === name);
-  const isAlreadyLoggedIn = name?.length !== 0 && isUserInSession;
+  const sessionUser = data?.users.find((user) => user.name === name);
+
+  console.log("sessionUser", sessionUser, name)
+  const isAlreadyLoggedIn = name?.length !== 0
 
   const updateToNextQuestion = async () => {
     try {
       await api.put(`/session/${sessionId}/next-question`);
-      const updated = await api.get<Data>(`/session/${sessionId}`);
-      dispatch(setData(updated.data));
+      await api.get<Data>(`/session/${sessionId}`);
     } catch (err) {
       console.log("Error", err);
     }
@@ -100,24 +99,25 @@ const Session = () => {
   }, [sessionId, name, dispatch]);
   
   
-  if (loading || !data) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <AiOutlineLoading3Quarters className="animate-spin text-4xl" />
-      </div>
-    );
-  }
+  // if (loading || !data) {
+  //   return (
+  //     <div className="flex justify-center items-center h-screen">
+  //       <AiOutlineLoading3Quarters className="animate-spin text-marine text-4xl" />
+  //     </div>
+  //   );
+  // }
 
-  console.log(data)
 
-  if (!sessionUser || !isAlreadyLoggedIn) {
+  console.log(sessionUser, isAlreadyLoggedIn)
+
+  if (!isAlreadyLoggedIn) {
     return (
       <JoinModal sessionId={sessionId} setName={setName} isOpen={true} />
     );
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div className="w-full min-h-screen flex flex-col mb-16 md:mb-2">
       <JoinModal
         sessionId={sessionId}
         setName={setName}
@@ -131,7 +131,7 @@ const Session = () => {
           sessionUser={sessionUser}
           sessionId={sessionId}
         />
-        <Users users={data.users} sessionLink={data.sessionLink} />
+        <Users users={data?.users} sessionLink={data?.sessionLink} />
       </div>
       {error && <div className="text-red-500">{error}</div>}
     </div>

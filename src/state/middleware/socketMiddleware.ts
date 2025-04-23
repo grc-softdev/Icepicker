@@ -14,20 +14,13 @@ export const socketMiddleware: Middleware = store => next => action => {
 
       socket.emit("join-room", sessionId);
 
-      socket.on("session-data", (data) => {
-
-        console.log('session-data-event')
-
-        store.dispatch(setData(data)); 
-        // store.dispatch(setSessionId(data.sessionId)); 
-        // store.dispatch(setCurrentUser(data.currentUser)); 
-      });
+      socket.emit("sessionDeleted", sessionId);
 
       socket.on("sessionUpdated", (updatedData) => {
-        console.log('sessionUpdated-event')
 
         store.dispatch(setData(updatedData));
       });
+
     }
   }
 

@@ -31,7 +31,7 @@ const Home = () => {
       dispatch(setError(""));
       router.push(response.data.sessionLink);
     } catch (err) {
-      console.log("Error. Try Again");
+      dispatch(setError(""));
     }
   };
 

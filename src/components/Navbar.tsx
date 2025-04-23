@@ -13,22 +13,21 @@ type NavbarProps = {
 
 const Navbar = ({ sessionId, sessionUser }: NavbarProps) => {
   const router = useRouter();
-
+  console.log(sessionId, sessionUser)
   const handleLeaveRoom = async () => {
-  
+  console.log(sessionId, sessionUser?.id)
     try {
       await api.put(`session/${sessionId}/leave`, {
         sessionId,
-        userId: sessionUser.id,
+        userId: sessionUser?.id,
       });
+      console.log(sessionUser?.id)
       localStorage.removeItem("name");
       router.push("/");
     } catch (error) {
       console.log("Error to leave", error);
     }
   };
-
-
 
   return (
     <div className="flex items-center justify-between mx-20 lg:mb-0 xl:mb-4">

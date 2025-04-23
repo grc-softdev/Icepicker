@@ -37,6 +37,9 @@ const JoinModal = ({
   };
 
   if (!isOpen) {
+    console.log(`about to return null`)
+
+
     return null;
   }
 

@@ -73,7 +73,7 @@ const Reactions = ({ onReact, reactions }: ReactionsProps) => {
             <button
               key={reaction.name}
               onClick={() => handleReact(reaction.name)}
-              className="flex items-center gap-2 px-4 md:py-2 rounded-full text-lg transition font-medium bg-background text-blue-900"
+              className="flex items-center gap-2 px-4 md:py-2 rounded-full shadow-md text-lg transition font-medium bg-background text-blue-900"
             >
               {getEmojiSymbol(reaction.name)}
               <span className="text-sm">{reaction.amount}</span>

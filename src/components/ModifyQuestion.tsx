@@ -2,7 +2,6 @@ import { api } from "@/app/services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
 import { setError, setLoading } from "@/state";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useParams } from "next/navigation";
 
 interface Props {
@@ -29,8 +28,6 @@ const ModifyQuestions = ({ onApproved }: Props) => {
         sessionId: sessionId,
       });
 
-      console.log({response})
-
       const modified = response.data?.modified;
 
       if (modified) {
@@ -42,40 +39,36 @@ const ModifyQuestions = ({ onApproved }: Props) => {
 
         if (onApproved) onApproved();
       } else {
-        dispatch(setError("Texto modificado não encontrado."));
+        dispatch(setError("Modified text not found."));
       }
     } catch (err) {
-      console.log({err})
-      dispatch(setError("Erro ao tentar modificar a pergunta."));
+      dispatch(setError("Error to modify question"));
     } finally {
       dispatch(setLoading(false));
     }
   };
 
-  if (loading) {
-    return <div><AiOutlineLoading3Quarters /></div>}
-
   return (
-    <div className="p-2 border flex flex-col items-center rounded-lg shadow max-w-xl bg-white">
-      <p className="text-sm text-gray-600">You can turn your question more...</p>
+    <div className="bg-background rounded-2xl px-8 py-4 mt-1 lg:mt-4 w-fit mx-auto shadow-md mb-2 lg:mb-4">
+      <p className="text-center text-sm font-semibold text-gray-600 mb-3">Use AI to make it</p>
 
-      <div className="flex gap-3 mt-2">
+      <div className="flex flex-wrap justify-center gap-3">
         <button
-          className="flex items-center gap-2 px-4 md:py-2 rounded-full text-sm transition font-medium bg-background text-blue-900"
+          className="bg-white text-gray-500 text-sm font-bold px-4 py-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition"
           onClick={() => handleModify("funnier")}
           disabled={loading}
         >
           funnier
         </button>
         <button
-          className="flex items-center gap-2 px-4 md:py-2 rounded-full text-sm transition font-medium bg-background text-blue-900"
+          className="bg-white text-gray-500 text-sm font-bold px-4 py-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition"
           onClick={() => handleModify("serious")}
           disabled={loading}
         >
           serious
         </button>
         <button
-          className="flex items-center gap-2 px-4 md:py-2 rounded-full text-sm transition font-medium bg-background text-blue-900"
+          className="bg-white text-gray-500 text-sm font-bold px-4 py-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition"
           onClick={() => handleModify("exciting")}
           disabled={loading}
         >
