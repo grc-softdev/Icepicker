@@ -1,54 +1,54 @@
-import { useState } from "react";
 import { api } from "@/app/services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
-import { setCurrentQuestion } from "@/state";
+import { setError, setLoading } from "@/state";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useParams } from "next/navigation";
 
 interface Props {
   onApproved?: () => void;
 }
 
 const ModifyQuestions = ({ onApproved }: Props) => {
-  const { currentQuestion } = useSelector((state: RootState) => state.session);
+  const {  loading, data } = useSelector((state: RootState) => state.session);
+  const { sessionId } = useParams<{ sessionId: string }>();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const currentQuestion = data?.currentQuestion
 
   const handleModify = async (selectedTone: "funnier" | "serious" | "exciting") => {
     if (!currentQuestion?.id) return;
+    dispatch(setLoading(true));
+    dispatch(setError(null));
 
-    setLoading(true);
-    setError(null);
-
+    
     try {
       const response = await api.post("/questions/modify", {
-        questionId: currentQuestion.id,
+        questionId: currentQuestion?.id,
         tone: selectedTone,
+        sessionId: sessionId,
       });
+
+      console.log({response})
 
       const modified = response.data?.modified;
 
       if (modified) {
-        
-        dispatch(setCurrentQuestion({
-          ...currentQuestion,
-          name: modified,
-        }));
 
-        
         await api.patch(`/questions/${currentQuestion.id}`, {
           name: modified,
+          sessionId,
         });
 
         if (onApproved) onApproved();
       } else {
-        setError("Texto modificado não encontrado.");
+        dispatch(setError("Texto modificado não encontrado."));
       }
     } catch (err) {
-      setError("Erro ao tentar modificar a pergunta.");
+      console.log({err})
+      dispatch(setError("Erro ao tentar modificar a pergunta."));
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 

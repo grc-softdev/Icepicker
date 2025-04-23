@@ -17,7 +17,8 @@ const CardUser = ({
   userId,
   avatar,
 }: CardUserProps) => {
-  const { hostId } = useSelector((state: RootState) => state.session);
+  const { data } = useSelector((state: RootState) => state.session);
+  const hostId = data?.hostId
   return (
     <div
       className={`border w-full h-20 rounded-xl p-3 bg-background flex items-center gap-3 cursor-pointer transition-colors duration-300 

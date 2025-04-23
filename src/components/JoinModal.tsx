@@ -3,6 +3,7 @@ import Image from "next/image";
 import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 type JoinProps = {
   sessionId: string;
@@ -17,15 +18,17 @@ const JoinModal = ({
 }: JoinProps) => {
   const [joinName, setJoinName] = useState("");
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const handleJoinSession = async (e) => {
     e.preventDefault();
-    if (!joinName.trim()) return;
+    if (!joinName.trim()) return
 
     try {
       await api.put(`/session/${sessionId}`, { name: joinName });
 
       setName(joinName);
+
+      dispatch({type: "session/initSocket", payload: sessionId})
 
       router.push(`/session/${sessionId}`);
     } catch (err) {

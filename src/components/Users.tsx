@@ -13,7 +13,9 @@ type UsersProps = {
 
 const Users = ({ users, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
-  const { currentUser } = useSelector((state: RootState) => state.session);
+  const { data } = useSelector((state: RootState) => state.session);
+
+  const currentUser = data?.currentUser
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(sessionLink || "");

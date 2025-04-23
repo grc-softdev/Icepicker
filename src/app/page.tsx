@@ -22,7 +22,7 @@ const Home = () => {
     event.preventDefault();
 
     if (!name) {
-      (setError("name is required"));
+      setError("name is required");
       return;
     }
 

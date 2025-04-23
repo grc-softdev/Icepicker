@@ -9,7 +9,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import JoinModal from "@/components/JoinModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
-import { setCurrentQuestion, setCurrentUser, setData, setError } from "@/state";
+import { initSocket, setData, setLoading } from "@/state";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export type User = {
@@ -36,26 +36,23 @@ type Question = {
 };
 
 const Session = () => {
-  
   const { sessionId } = useParams<{ sessionId: string }>();
   const dispatch = useDispatch();
-  const { data, error } = useSelector((state: RootState) => state.session);
+  const { data, error, loading } = useSelector((state: RootState) => state.session);
 
   const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
   const defaultUser = cachedUserName || "";
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
+  const [sessionUser, setSessionUser] = useState<User | null>(null);
+
   const isUserInSession = data?.users?.some((user) => user.name === name);
   const isAlreadyLoggedIn = name?.length !== 0 && isUserInSession;
 
-  const [loading, setLoading] = useState(true);
-  const [sessionUser, setSessionUser] = useState<User | null>(null);
-
-  const isFirstUser = data?.users?.[0]?.id === sessionUser?.id;
-  
   const updateToNextQuestion = async () => {
     try {
-      const res = await api.put(`/session/${sessionId}/next-question`);
-      dispatch(setCurrentQuestion(res.data.currentQuestion));
+      await api.put(`/session/${sessionId}/next-question`);
+      const updated = await api.get<Data>(`/session/${sessionId}`);
+      dispatch(setData(updated.data));
     } catch (err) {
       console.log("Error", err);
     }
@@ -63,93 +60,61 @@ const Session = () => {
 
   const updateToNextUser = async () => {
     try {
-      const res = await api.put(`/session/${sessionId}/next-user`);
-      dispatch(setCurrentUser({...res.data.currentUser}));
+      await api.put(`/session/${sessionId}/next-user`);
+      await api.get<Data>(`/session/${sessionId}`);
+
     } catch (err) {
       console.log("Error", err);
     }
   };
-
 
   useEffect(() => {
     if (!sessionId) return;
 
     const fetchSession = async () => {
       try {
+        dispatch(setLoading(true));
         const res = await api.get<Data>(`/session/${sessionId}`);
         dispatch(setData(res.data));
 
         const foundUser = res.data.users.find((user) => user.name === name);
         setSessionUser(foundUser || null);
-        setLoading(false);
+        dispatch(setLoading(false));
 
-        const currentUserStills = res.data.users.some((user) => user.id === res.data.currentUser?.id)
-        
-        if(!currentUserStills){
+        const currentUserStills = res.data.users.some(
+          (user) => user.id === res.data.currentUser?.id
+        );
+
+        if (!currentUserStills) {
           const resNext = await api.put(`/session/${sessionId}/next-user`);
-          dispatch(setCurrentUser(resNext.data.currentUser));
+          dispatch(setData(resNext.data.currentUser));
         }
 
+        dispatch(initSocket(sessionId));
       } catch (error) {
-        console.log("Error. Try Again");
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
 
     fetchSession();
-    const interval = setInterval(fetchSession, 2000);
-    return () => clearInterval(interval);
   }, [sessionId, name, dispatch]);
-
-  useEffect(() => {
-    const onClosing = async (event: BeforeUnloadEvent) => {
-      event.preventDefault()
-
-      try {
-        const payload = JSON.stringify({
-          sessionId,
-          userId: sessionUser?.id,
-        });
-
-        const leaveEndpoint = `${process.env.NEXT_PUBLIC_API}/session/${sessionId}/leave`
-
-        fetch(`${leaveEndpoint}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: payload,
-          keepalive: true,
-        });
-      
-        localStorage.removeItem("name");
-      } catch (error) {
-        console.log("Error to leave", error);
-      }
-    };
   
-    window.addEventListener("beforeunload", onClosing);
   
-    return () => {
-      window.removeEventListener("beforeunload", onClosing);
-    };
-  }, [sessionUser?.id]);
-
   if (loading || !data) {
-    return <div><AiOutlineLoading3Quarters /></div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <AiOutlineLoading3Quarters className="animate-spin text-4xl" />
+      </div>
+    );
   }
+
+  console.log(data)
 
   if (!sessionUser || !isAlreadyLoggedIn) {
     return (
-      <JoinModal
-        sessionId={sessionId}
-        setName={setName}
-        isOpen={true}
-      />
+      <JoinModal sessionId={sessionId} setName={setName} isOpen={true} />
     );
   }
-  
-
 
   return (
     <div className="w-full min-h-screen flex flex-col">
@@ -165,12 +130,8 @@ const Session = () => {
           updateToNextUser={updateToNextUser}
           sessionUser={sessionUser}
           sessionId={sessionId}
-          isFirstUser={isFirstUser}
         />
-        <Users
-          users={data.users}
-          sessionLink={data.sessionLink}
-        />
+        <Users users={data.users} sessionLink={data.sessionLink} />
       </div>
       {error && <div className="text-red-500">{error}</div>}
     </div>

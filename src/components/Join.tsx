@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import JoinModal from "./JoinModal";
 import { useParams } from "next/navigation";
 import { api } from "@/app/services/api";
+import { setError } from "@/state";
+import { useDispatch } from "react-redux";
 
 const Join = () => {
+  const dispatch = useDispatch()
   const { sessionId } = useParams();
-
   const [sessionName, setSessionName] = useState("");
 
   useEffect(() => {
@@ -15,7 +17,7 @@ const Join = () => {
         const response = await api.get(`/get-session/${sessionId}`);
         setSessionName(response.data.sessionName);
       } catch (err) {
-        console.log("Error fetching session data", err);
+        dispatch(setError("Error fetching session data", err));
       }
     };
 

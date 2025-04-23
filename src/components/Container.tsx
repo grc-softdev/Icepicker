@@ -2,14 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
 import { User } from "@/app/session/[sessionId]/page";
 import { capFirstLetter, userAvatar } from "../utils/format";
 import Reactions from "./Reactions";
 import { api } from "@/app/services/api";
 import { RootState } from "@/state/redux";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentQuestion } from "@/state";
+import { useSelector } from "react-redux";
 import ModifyQuestions from "./ModifyQuestion";
 
 export type ContainerProps = {
@@ -38,13 +36,16 @@ export type Reaction = {
 const Container = ({
   updateToNextUser,
   updateToNextQuestion,
-  isFirstUser,
   sessionUser,
   sessionId,
 }: ContainerProps) => {
-  const dispatch = useDispatch();
-  const { currentQuestion, currentUser } = useSelector((state: RootState) => state.session);
-  const [userReactions, setUserReactions] = useState<Record<string, Record<string, string[]>>>({});
+  const { data } = useSelector(
+    (state: RootState) => state.session
+  );
+
+  const currentQuestion = data?.currentQuestion
+  const currentUser = data?.currentUser
+  const hostId = data?.hostId
 
   const onReact = async (reactionName: string) => {
     if (!sessionUser?.id || !currentQuestion?.id) {
@@ -52,38 +53,13 @@ const Container = ({
     }
 
     try {
-      const res = await api.post(`/session/${sessionId}/toggle`, {
+      await api.post(`/session/${sessionId}/toggle`, {
         userId: sessionUser?.id,
         questionId: currentQuestion?.id,
         reactionName: reactionName,
         sessionId: sessionId,
       });
 
-      const updateReactions = res?.data?.reactions;
-
-      if (!Array.isArray(updateReactions)) {
-        return;
-      }
-
-      dispatch(setCurrentQuestion({
-        ...currentQuestion,
-        reactions: updateReactions
-      }));
-
-      const foundReaction = updateReactions.find(
-        (react) => react.name === reactionName
-      );
-
-      const reactionDetected =
-        foundReaction?.users?.map((user) => user.id) ?? [];
-
-      setUserReactions((prev) => ({
-        ...prev,
-        [currentQuestion.id]: {
-          ...prev[currentQuestion.id],
-          [sessionUser.id]: reactionDetected,
-        },
-      }));
     } catch (err) {
       console.log("unknown error:", err);
     }
@@ -113,7 +89,6 @@ const Container = ({
         )}
 
         <Reactions reactions={currentQuestion?.reactions} onReact={onReact} />
-
         {currentQuestion && (
           <div className="w-full">
             <h2 className="mt-4 md:text-lg lg:text-xl xl:text-2xl font-semibold p-3 text-center text-gray-800 mb-2 lg:mb-4">
@@ -121,12 +96,9 @@ const Container = ({
             </h2>
           </div>
         )}
-        {isFirstUser && (
-          <ModifyQuestions/>
-        )}
+        {hostId === sessionUser.id && <ModifyQuestions />}
 
-        {isFirstUser && (
-          
+        {hostId === sessionUser.id && (
           <div className="w-full flex sm:flex-col items-center justify-center gap-4 mt-4 sm:mt-4 md:mt-6">
             <button
               onClick={updateToNextUser}
