@@ -26,19 +26,21 @@ export type Data = {
   questions: Question[];
   users: User[];
   sessionUser: User;
+  hostId: string
 };
 
 type Question = {
   name: string;
   id: string;
-  reaction: Reaction[];
+  reactions: Reaction[];
 };
 
 const Session = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
   const dispatch = useDispatch();
   const { data, error } = useSelector((state: RootState) => state.session);
-  const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
+  const savedName = window.localStorage.getItem("name")
+  const cachedUserName = savedName ? JSON.parse(savedName) : undefined
   const defaultUser = cachedUserName || "";
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
 

@@ -8,8 +8,8 @@ import { RootState } from "@/state/redux";
 import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 
 type UsersProps = {
-  users: User[];
-  sessionLink: string;
+  users: User[] | undefined;
+  sessionLink: string | undefined;
 };
 
 const Users = ({ users, sessionLink }: UsersProps) => {

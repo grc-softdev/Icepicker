@@ -31,7 +31,7 @@ const Join = () => {
   return (
     <div>
       <h1>Welcome to {sessionName} Session</h1>
-      <JoinModal sessionId={sessionId} />
+      <JoinModal sessionId={sessionId as string} />
     </div>
   );
 };

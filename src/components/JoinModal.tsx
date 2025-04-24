@@ -8,8 +8,8 @@ import { setError } from "@/state";
 
 type JoinProps = {
   sessionId: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  isOpen: boolean;
+  setName?: React.Dispatch<React.SetStateAction<string>>;
+  isOpen?: boolean;
 };
 
 const JoinModal = ({
@@ -27,7 +27,7 @@ const JoinModal = ({
     try {
       await api.put(`/session/${sessionId}`, { name: joinName });
 
-      setName(joinName);
+      if (setName) setName(joinName);
 
       dispatch({type: "session/initSocket", payload: sessionId})
 

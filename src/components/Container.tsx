@@ -11,12 +11,10 @@ import ModifyQuestions from "./ModifyQuestion";
 import { Skeleton } from "@mui/material";
 
 export type ContainerProps = {
-  questions: question[];
-  users: User[];
   updateToNextQuestion: () => void;
   updateToNextUser: () => void;
-  isFirstUser: User;
-  sessionUser: User;
+
+  sessionUser: User | undefined;
   sessionId: string;
 };
 

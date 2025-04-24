@@ -59,15 +59,10 @@ const sessionSlice = createSlice({
 
 export const {
   setData,
-  setCurrentQuestion,
-  setCurrentUser,
   setError,
   setName,
   setLoading,
   setSessionId,
-  updateUserList,
-  updateReactions,
-  updateQuestion,
   initSocket,
 } = sessionSlice.actions;
 
