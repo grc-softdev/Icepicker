@@ -16,7 +16,7 @@ export type User = {
   name: string;
   role: "HOST" | "GUEST";
   avatar: string;
-} | undefined;
+};
 
 export type Data = {
   sessionLink: string;
