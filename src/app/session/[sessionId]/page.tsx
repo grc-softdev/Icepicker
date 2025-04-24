@@ -37,15 +37,14 @@ type Question = {
 const Session = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
   const dispatch = useDispatch();
-  const { data, error, loading } = useSelector((state: RootState) => state.session);
+  const { data, error } = useSelector((state: RootState) => state.session);
 
   const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
   const defaultUser = cachedUserName || "";
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
 
   const sessionUser = data?.users.find((user) => user.name === name);
-
-  console.log("sessionUser", sessionUser, name)
+  console.log(sessionUser)
   const isAlreadyLoggedIn = name?.length !== 0
 
   const updateToNextQuestion = async () => {
@@ -76,8 +75,6 @@ const Session = () => {
         const res = await api.get<Data>(`/session/${sessionId}`);
         dispatch(setData(res.data));
 
-        const foundUser = res.data.users.find((user) => user.name === name);
-        setSessionUser(foundUser || null);
         dispatch(setLoading(false));
 
         const currentUserStills = res.data.users.some(
@@ -85,8 +82,7 @@ const Session = () => {
         );
 
         if (!currentUserStills) {
-          const resNext = await api.put(`/session/${sessionId}/next-user`);
-          dispatch(setData(resNext.data.currentUser));
+         await api.put(`/session/${sessionId}/next-user`);
         }
 
         dispatch(initSocket(sessionId));
@@ -98,17 +94,6 @@ const Session = () => {
     fetchSession();
   }, [sessionId, name, dispatch]);
   
-  
-  // if (loading || !data) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen">
-  //       <AiOutlineLoading3Quarters className="animate-spin text-marine text-4xl" />
-  //     </div>
-  //   );
-  // }
-
-
-  console.log(sessionUser, isAlreadyLoggedIn)
 
   if (!isAlreadyLoggedIn) {
     return (

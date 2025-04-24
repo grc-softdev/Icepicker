@@ -42,6 +42,7 @@ const Container = ({
   const { data, loading } = useSelector((state: RootState) => state.session);
 
   const currentQuestion = data?.currentQuestion;
+  console.log(currentQuestion)
   const currentUser = data?.currentUser;
   const hostId = data?.hostId;
 
@@ -62,6 +63,8 @@ const Container = ({
     }
   };
 
+  console.log(currentQuestion)
+
   return (
     <section className="flex items-center justify-center px-1 md:px-2 lg:px-4 w-[348px] h-[100%] lg:w-full">
       <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">
@@ -80,8 +83,9 @@ const Container = ({
             {capFirstLetter(currentUser?.name)}
           </h2>
         )}
-
-        <Reactions reactions={currentQuestion?.reactions} onReact={onReact} />
+        {currentQuestion && (
+        <Reactions reactions={currentQuestion?.reactions} onReact={onReact} />)
+        }
         
 
         <div className="relative">
@@ -94,13 +98,13 @@ const Container = ({
           )}
             {loading && (
                 <div className="absolute inset-0 mt-2 bg-white">
-                {[80, 70, 60].map((width, index) => (
+                {[80, 70].map((width, index) => (
                   <Skeleton
                     key={index}
                     animation="wave"
                     height={20}
                     width={`${width}%`}
-                    sx={{ mx: "auto", my: 2.5 }}
+                    sx={{ mx: "auto", my: 3.0 }}
                   />
                 ))}
               </div>)}

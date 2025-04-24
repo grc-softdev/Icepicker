@@ -39,7 +39,6 @@ const sessionSlice = createSlice({
     setSessionId(state, action: PayloadAction<string>) {
       state.sessionId = action.payload;
     },
-
    
     setError(state, action: PayloadAction<string>) {
       state.error = action.payload;

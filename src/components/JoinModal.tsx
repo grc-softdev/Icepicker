@@ -61,7 +61,7 @@ const JoinModal = ({
             placeholder="Username"
             value={joinName}
             onChange={(e) => setJoinName(e.target.value)}
-            className="w-full pl-2 text-marine rounded-md border-solid border-2 border-gray py-1.5 mb-2"
+            className="w-full pl-2 text-gray-700 rounded-md border-solid border-2 border-gray py-1.5 mb-2"
             required
           />
           <button

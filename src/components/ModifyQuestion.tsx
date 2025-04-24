@@ -14,7 +14,6 @@ const ModifyQuestions = ({ onApproved }: Props) => {
   const dispatch = useDispatch();
 
   const currentQuestion = data?.currentQuestion
-
   const handleModify = async (selectedTone: "funnier" | "serious" | "exciting") => {
     if (!currentQuestion?.id) return;
     dispatch(setLoading(true));
@@ -29,7 +28,6 @@ const ModifyQuestions = ({ onApproved }: Props) => {
       });
 
       const modified = response.data?.modified;
-
       if (modified) {
 
         await api.patch(`/questions/${currentQuestion.id}`, {
