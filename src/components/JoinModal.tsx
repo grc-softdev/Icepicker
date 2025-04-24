@@ -4,6 +4,7 @@ import nav from "../app/assets/nav.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { setError } from "@/state";
 
 type JoinProps = {
   sessionId: string;
@@ -19,8 +20,8 @@ const JoinModal = ({
   const [joinName, setJoinName] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-  const handleJoinSession = async (e) => {
-    e.preventDefault();
+  const handleJoinSession = async (event:React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!joinName.trim()) return
 
     try {
@@ -32,7 +33,13 @@ const JoinModal = ({
 
       router.push(`/session/${sessionId}`);
     } catch (err) {
-      console.log("Failed to join session.");
+      const error = err as { 
+        message: string
+      } | undefined
+
+      const userError = error?.message || 'Error when fetching'
+
+      dispatch(setError(userError));
     }
   };
 

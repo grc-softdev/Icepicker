@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { GoCopy } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
-import { styled, Tooltip, tooltipClasses } from "@mui/material";
+import { styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 
 type UsersProps = {
   users: User[];
@@ -33,9 +33,9 @@ const Users = ({ users, sessionLink }: UsersProps) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const CustomTooltip = styled(({ className, ...props }) => (
+  const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
+))(() => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#3B82F6", // Tailwind gray-800
     color: "#f9fafb",            // Tailwind gray-50

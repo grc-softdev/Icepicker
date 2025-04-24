@@ -17,7 +17,11 @@ const Join = () => {
         const response = await api.get(`/get-session/${sessionId}`);
         setSessionName(response.data.sessionName);
       } catch (err) {
-        dispatch(setError("Error fetching session data", err));
+        const error = err as { 
+          message: string
+        } | undefined
+        const userError = error?.message || 'Error when fetching'
+        dispatch(setError(userError));
       }
     };
 

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Users from "@/components/Users";
@@ -9,14 +9,14 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import JoinModal from "@/components/JoinModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
-import { initSocket, setData, setLoading } from "@/state";
+import { initSocket, setData, setError, setLoading } from "@/state";
 
 export type User = {
   id: string;
   name: string;
   role: "HOST" | "GUEST";
   avatar: string;
-};
+} | undefined;
 
 export type Data = {
   sessionLink: string;
@@ -38,7 +38,6 @@ const Session = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
   const dispatch = useDispatch();
   const { data, error } = useSelector((state: RootState) => state.session);
-
   const cachedUserName = JSON.parse(window.localStorage.getItem("name"));
   const defaultUser = cachedUserName || "";
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
@@ -86,8 +85,14 @@ const Session = () => {
         }
 
         dispatch(initSocket(sessionId));
-      } catch (error) {
-        dispatch(setLoading(false));
+      } catch (err) {
+        const error = err as { 
+          message: string
+        } | undefined
+  
+        const userError = error?.message || 'Error when fetching'
+  
+        dispatch(setError(userError));
       }
     };
 
@@ -108,7 +113,7 @@ const Session = () => {
         setName={setName}
         isOpen={!isAlreadyLoggedIn}
       />
-      <Navbar sessionId={sessionId} sessionUser={sessionUser} />
+      {sessionUser &&(<Navbar sessionId={sessionId} sessionUser={sessionUser} />)}
       <div className="flex flex-col md:flex-row-reverse items-center sm:items-center md:items-start justify-center mx-20 gap-6 mt-2 sm:mt-2 md:mt-0">
         <Container
           updateToNextQuestion={updateToNextQuestion}

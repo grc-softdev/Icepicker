@@ -17,7 +17,6 @@ const ModifyQuestions = ({ onApproved }: Props) => {
   const handleModify = async (selectedTone: "funnier" | "serious" | "exciting") => {
     if (!currentQuestion?.id) return;
     dispatch(setLoading(true));
-    dispatch(setError(null));
 
     
     try {
@@ -40,7 +39,13 @@ const ModifyQuestions = ({ onApproved }: Props) => {
         dispatch(setError("Modified text not found."));
       }
     } catch (err) {
-      dispatch(setError("Error to modify question"));
+      const error = err as { 
+        message: string
+      } | undefined
+
+      const userError = error?.message || 'Error when fetching'
+
+      dispatch(setError(userError));
     } finally {
       dispatch(setLoading(false));
     }

@@ -30,8 +30,16 @@ const Home = () => {
       const response = await api.post<SessionResp>("/session", { name });
       dispatch(setError(""));
       router.push(response.data.sessionLink);
+
     } catch (err) {
-      dispatch(setError(""));
+
+      const error = err as { 
+        message: string
+      } | undefined
+
+      const userError = error?.message || 'Error when fetching'
+
+      dispatch(setError(userError));
     }
   };
 
