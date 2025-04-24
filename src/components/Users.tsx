@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardUser from "./CardUser";
 import { User } from "@/app/session/[sessionId]/page";
 import { toast, ToastContainer } from "react-toastify";
 import { GoCopy } from "react-icons/go";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/redux";
+import { styled, Tooltip, tooltipClasses } from "@mui/material";
 
 type UsersProps = {
   users: User[];
@@ -14,6 +15,7 @@ type UsersProps = {
 const Users = ({ users, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
   const { data } = useSelector((state: RootState) => state.session);
+  const [showTooltip, setShowTooltip] = useState(true);
 
   const currentUser = data?.currentUser
 
@@ -23,6 +25,29 @@ const Users = ({ users, sessionLink }: UsersProps) => {
     toast("Invite your friends! =)");
     setTimeout(() => setCopied(false), 2000);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const CustomTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#3B82F6", // Tailwind gray-800
+    color: "#f9fafb",            // Tailwind gray-50
+    fontSize: "0.875rem",        // ~14px
+    padding: "10px 14px",
+    borderRadius: "8px",
+    maxWidth: 220,
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#3B82F6",            // Match tooltip bg
+  },
+}));
 
   return (
     <section className="flex flex-col mt-6 sm:mt-6 md:mt-0">
@@ -50,6 +75,15 @@ const Users = ({ users, sessionLink }: UsersProps) => {
                 value={`${sessionLink.substring(0, 32)}...`}
                 readOnly
               />
+              <CustomTooltip
+                title="Share with others to play!"
+                open={showTooltip && !copied}
+                arrow
+                placement="top"
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+>
               <button
                 onClick={handleCopyLink}
                 className={`flex items-center justify-center px-3 py-2 rounded-lg transition-all duration-200 ${
@@ -72,6 +106,7 @@ const Users = ({ users, sessionLink }: UsersProps) => {
                   </svg>
                 )}
               </button>
+              </CustomTooltip>
             </div>
           </div>
         )}
