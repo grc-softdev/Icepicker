@@ -67,13 +67,13 @@ const Container = ({
     <section className="flex items-center justify-center px-1 md:px-2 lg:px-4 w-[348px] h-[100%] lg:w-full">
       <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <div className="flex items-center justify-center w-full h-[80px] sm:h-80px md-[90px] lg:[96px] mb-2">
-          <Image
+          {currentUser?.avatar &&(<Image
             src={userAvatar(currentUser?.avatar)}
             width={100}
             height={100}
             alt="user"
             className="rounded-full cursor-pointer"
-          />
+          />)}
         </div>
 
         {currentUser && (

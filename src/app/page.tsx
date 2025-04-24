@@ -46,7 +46,7 @@ const Home = () => {
   return (
     <div className="p-6 min-h-screen rounded-xl bg-magnolia">
       <section className="mt-40 flex flex-col items-center">
-        <Image src={nav} alt="logo" width={200} className="cursor-pointer" />
+        <Image src={nav} alt="logo" width={200} />
         <form className="w-[400px]" onSubmit={handleLogin}>
           <input
             type="text"
