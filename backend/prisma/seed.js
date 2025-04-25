@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
-import fs from 'fs';
+const { PrismaClient } = require('@prisma/client');
+const fs = require("fs");
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const rawData = fs.readFileSync('prisma/questions.json', 'utf-8');
+  const rawData = fs.readFileSync('prisma/seedData/questions.json', 'utf-8');
   const questions = JSON.parse(rawData);
 
   for (const question of questions) {
@@ -19,7 +19,7 @@ async function main() {
     }
   }
 
-  console.log("Questions successfully created !");
+  console.log("Questions successfully created!");
 }
 
 main()

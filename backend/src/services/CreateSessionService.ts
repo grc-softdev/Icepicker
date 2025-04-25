@@ -29,7 +29,7 @@ class CreateSessionService {
       let allQuestions;
       try {
         allQuestions = await prismaClient.question.findMany({
-          take: 20,
+          take: 25,
           include: { reactions: true },
           orderBy: { createdAt: "asc" },
         });
