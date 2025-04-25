@@ -8,6 +8,7 @@ import { modifiedQuestionRoutes } from "./ModifiedQuestionRoutes";
 import http from "http";
 import { initSocket } from "./socket";
 import { ErrorRequestHandler } from "express";
+require('dotenv').config();
 
 const app = express();
 
