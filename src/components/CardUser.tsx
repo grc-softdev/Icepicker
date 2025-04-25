@@ -1,5 +1,5 @@
 import { RootState } from "@/state/redux";
-import { capFirstLetter, userAvatar } from "@/utils/format";
+import { capFirstLetter } from "@/utils/format";
 import Image from "next/image";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -30,11 +30,12 @@ const CardUser = ({
     >
       {avatar && (
         <Image
-          src={userAvatar(avatar)}
+          src={(avatar)}
           width={50}
           height={50}
           alt="avatar"
           className="rounded-full"
+          priority
         />
       )}
 

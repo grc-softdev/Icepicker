@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  
   images: {
     remotePatterns: [
       {
@@ -12,12 +11,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "imgur.com",
-        port: "",
+        hostname: "icepickbucket.s3.sa-east-1.amazonaws.com",
         pathname: "/**",
       },
-    ]
-}
+    ],
+  },
 };
 
 export default nextConfig;

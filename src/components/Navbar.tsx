@@ -31,7 +31,7 @@ const Navbar = ({ sessionId, sessionUser }: NavbarProps) => {
 
   return (
     <div className="flex items-center justify-between mx-20 lg:mb-0 xl:mb-4">
-      <Image src={nav} width={120} height={90} alt="logo" />
+      <Image src={nav} width={120} height={90} alt="logo" priority/>
       <div onClick={handleLeaveRoom}>
         <VscSignOut className="w-8 h-7 text-marine rounded-md hover:text-greenblue"/>
       </div>

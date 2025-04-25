@@ -73,6 +73,7 @@ const Session = () => {
     const fetchSession = async () => {
       try {
         dispatch(setLoading(true));
+        console.log("why", sessionId)
         const res = await api.get<Data>(`/session/${sessionId}`);
         dispatch(setData(res.data));
 

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { User } from "@/app/session/[sessionId]/page";
-import { capFirstLetter, userAvatar } from "../utils/format";
+import { capFirstLetter } from "../utils/format";
 import Reactions from "./Reactions";
 import { api } from "@/app/services/api";
 import { RootState } from "@/state/redux";
@@ -68,11 +68,12 @@ const Container = ({
       <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <div className="flex items-center justify-center w-full h-[80px] sm:h-80px md-[90px] lg:[96px] mb-2">
           {currentUser?.avatar &&(<Image
-            src={userAvatar(currentUser?.avatar)}
+            src={(currentUser?.avatar)}
             width={100}
             height={100}
             alt="user"
             className="rounded-full cursor-pointer"
+            priority
           />)}
         </div>
 
