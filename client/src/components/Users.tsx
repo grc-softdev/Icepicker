@@ -55,14 +55,13 @@ const Users = ({ users, sessionLink }: UsersProps) => {
       <div className="flex flex-col justify-between min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
           {users?.map((user) => (
-            <div key={user.id}>
               <CardUser
                 name={user.name}
+                key={user.id}
                 avatar={user.avatar}
                 userId={user.id}
                 isCurrent={currentUser?.id === user.id}
               />
-            </div>
           ))}
         </div>
 

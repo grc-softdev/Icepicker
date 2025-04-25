@@ -1,4 +1,4 @@
-// File: /Users/grcn/Documents/Icepick/frontend/src/app/session/[sessionId]/page.tsx
+// File: /Users/grcn/Documents/Icepick/icepicker/client/src/app/session/[sessionId]/page.tsx
 import * as entry from '../../../../../src/app/session/[sessionId]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
