@@ -38,7 +38,7 @@ app.use(((err: Error, req: Request, res: Response, next: NextFunction) => {
 }) as ErrorRequestHandler);
 
 const server = http.createServer(app);
-initSocket(server); // ✨ separa o Socket.IO em um componente
-const PORT = Number(process.env.PORT) || 3333;
+initSocket(server);
+const PORT = Number(process.env.PORT) || 3002;
 server.listen(PORT,"0.0.0.0", () => console.log(`Server running on port ${PORT}`));
 export default app;
