@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String         @id @default(uuid())
+  name       String         @unique
+  avatar     String?
+  email      String?        @unique
+  password   String?
+  sessions   SessionUser[]
+  hostedSessions Session[]  @relation("SessionHost")
+  currentSessions Session[] @relation("CurrentUser")
+   invites    Invite[]       @relation("InvitedUser")
+  userReactions UserReaction[]
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+  @@map("users")
+}
+
+model Reaction {
+  id         String         @id @default(uuid())
+  name       String
+  amount     Int            @default(0)
+  sessionId  String?
+  questionId String
+  createdAt   DateTime @default(now())
+  question   Question       @relation(fields: [questionId], references: [id])
+  userReactions UserReaction[]
+
+  @@unique([questionId, name, sessionId])
+}
+ model Question {
+  id        String   @id @default(uuid())
+  name      String
+  reactions Reaction[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessions  SessionQuestion[]
+
+  currentSessions Session[] @relation("CurrentQuestion")
+}
+
+model UserReaction {
+  userId     String
+  reactionId String
+  user       User     @relation(fields: [userId], references: [id])
+  reaction   Reaction @relation(fields: [reactionId], references: [id])
+
+  @@id([userId, reactionId])
+}
+
+model SessionQuestion {
+  sessionId String
+  questionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  question  Question @relation(fields: [questionId], references: [id])
+  createdAt DateTime @default(now())
+  @@id([sessionId, questionId])
+}
+
+model Session {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  currentUserId String?
+  currentQuestionId String?
+  currentUser User?        @relation("CurrentUser", fields: [currentUserId], references: [id])
+  currentQuestion Question? @relation("CurrentQuestion", fields: [currentQuestionId], references: [id])
+  hostId     String?    
+  role       Role?      
+  host       User?      @relation("SessionHost", fields: [hostId], references: [id])
+  users      SessionUser[]     
+  invites    Invite[]
+  questions  SessionQuestion[]
+}
+
+enum Role {
+  HOST
+  GUEST
+}
+
+model SessionUser {
+  sessionId String
+  userId    String
+  role      Role? 
+  session   Session @relation(fields: [sessionId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  @@id([sessionId, userId])
+}
+
+model Invite {
+  id            String     @id @default(uuid())
+  sessionId     String     
+  invitedUserId String     
+  session       Session    @relation(fields: [sessionId], references: [id])
+  invitedUser   User       @relation("InvitedUser", fields: [invitedUserId], references: [id])
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
