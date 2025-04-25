@@ -39,6 +39,6 @@ app.use(((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 const server = http.createServer(app);
 initSocket(server);
-const PORT = Number(process.env.PORT) || 3002;
+const PORT = Number(process.env.PORT) || 3333;
 server.listen(PORT,"0.0.0.0", () => console.log(`Server running on port ${PORT}`));
 export default app;
