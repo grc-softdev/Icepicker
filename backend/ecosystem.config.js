@@ -1,7 +1,7 @@
 module.export = {
     apps: [
         {
-            name: "project-management",
+            name: "icepicker",
             script: "npm",
             args: "run dev",
             env: {
