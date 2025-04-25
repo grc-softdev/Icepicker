@@ -8,7 +8,11 @@ let io: Server;
 export const initSocket = (server: http.Server) => {
   io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: [
+        'https://52.67.78.92.nip.io',
+        'https://main.d9pxq75h0yt4e.amplifyapp.com'],
+        methods: ['GET','POST'],
+        credentials: true,
     },
   });
 

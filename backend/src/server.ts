@@ -8,21 +8,36 @@ import { modifiedQuestionRoutes } from "./ModifiedQuestionRoutes";
 import http from "http";
 import { initSocket } from "./socket";
 import { ErrorRequestHandler } from "express";
+import { Configuration, OpenAIApi } from "openai";
 require('dotenv').config();
 
 const app = express();
-
 app.use(express.json());
-app.use(cors(({
-  origin: "*",
-  //"https://icepicker.vercel.app", // ou "*", se for para testes
+
+app.use(cors({
+  origin: [
+  'https://52.67.78.92.nip.io',
+  'https://main.d9pxq75h0yt4e.amplifyapp.com'],
+  methods: ['GET','POST'],
   credentials: true,
-})));
+}));
+
 app.use(router);
 app.use(modifiedQuestionRoutes);
 
-// //url ex: localhost:3333/files.nomes-imagem.png
-// app.use("/files", express.static(path.resolve(__dirname, "..", "avatars")));
+const openai = new OpenAIApi(new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+}));
+
+app.post('/chat', async (req, res) => {
+  const { messages } = req.body;
+  const completion = await openai.createChatCompletion({
+    model: 'gpt-4o-mini',
+    messages
+  });
+  res.json(completion.data);
+});
+
 
 app.use(((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof Error) {
