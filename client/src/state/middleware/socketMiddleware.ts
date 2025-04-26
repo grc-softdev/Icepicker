@@ -4,13 +4,15 @@ import { setData, initSocket } from "..";
 
 let socket: Socket | null = null;
 
-// Removemos o uso de RootState para quebrar a dependência circular
 export const socketMiddleware: Middleware = (store) => (next) => (action) => {
   if (initSocket.match(action)) {
     if (!socket) {
       const sessionId = action.payload;
 
-      socket = io("http://localhost:3333", { transports: ["websocket"] });
+      const socketUrl =
+        process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3333";
+
+      socket = io(socketUrl, { transports: ["websocket"] });
 
       socket.emit("join-room", sessionId);
       socket.emit("sessionDeleted", sessionId);
