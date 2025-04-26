@@ -1,4 +1,5 @@
-// server.ts
+require('dotenv').config();
+
 import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors";
 import { router } from "./routes";
@@ -8,8 +9,8 @@ import { modifiedQuestionRoutes } from "./ModifiedQuestionRoutes";
 import http from "http";
 import { initSocket } from "./socket";
 import { ErrorRequestHandler } from "express";
-import { Configuration, OpenAIApi } from "openai";
-require('dotenv').config();
+import OpenAI from "openai";
+
 
 const app = express();
 app.use(express.json());
@@ -25,17 +26,19 @@ app.use(cors({
 app.use(router);
 app.use(modifiedQuestionRoutes);
 
-const openai = new OpenAIApi(new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-}));
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
-app.post('/chat', async (req, res) => {
+app.post("/chat", async (req, res) => {
   const { messages } = req.body;
-  const completion = await openai.createChatCompletion({
-    model: 'gpt-4o-mini',
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
     messages
   });
-  res.json(completion.data);
+
+  const reply = completion.choices?.[0]?.message;
+  res.json(reply);
 });
 
 
