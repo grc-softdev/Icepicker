@@ -14,12 +14,15 @@ async function main() {
   
     if (!exists) {
       await prisma.question.create({
-        data: question,
+        data: {
+          ...question,
+          isTemplate: true,
+        },
       });
     }
   }
 
-  // Parte nova: Corrigir apenas perguntas sem sessões
+  
   const questionsWithoutSessions = await prisma.question.findMany({
     where: {
       isTemplate: false,
