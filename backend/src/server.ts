@@ -19,7 +19,7 @@ app.use(cors({
   origin: [
   'https://18.229.125.23.nip.io',
   'https://main.d9pxq75h0yt4e.amplifyapp.com'],
-  methods: ['GET','POST'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
 
