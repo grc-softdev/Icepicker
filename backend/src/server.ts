@@ -12,6 +12,8 @@ import { ErrorRequestHandler } from "express";
 import OpenAI from "openai";
 
 
+
+export const OWN_ORIGIN = 'https://18.231.17.46.nip.io'
 const app = express();
 app.use(express.json());
 
@@ -22,7 +24,7 @@ console.log({frontendURL}, process.env.NODE_ENV)
 
 app.use(cors({
   origin: [
-  'https://18.231.17.46.nip.io',
+  OWN_ORIGIN,
   frontendURL
   ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
