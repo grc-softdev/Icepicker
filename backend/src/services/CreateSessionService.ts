@@ -61,7 +61,14 @@ class CreateSessionService {
             data: { 
               name: question.name,
               isTemplate: false,
-             },
+              reactions: {
+                create: question.reactions.map((reaction) => ({
+                  name: reaction.name,
+                  amount: 0,
+                  sessionId: session.id,
+                })),
+              },
+            },
           });
 
           await prismaClient.sessionQuestion.create({
@@ -70,19 +77,6 @@ class CreateSessionService {
               questionId: clonedQuestion.id,
             },
           });
-
-          if (question.reactions.length > 0) {
-            const clonedReactions = question.reactions.map((reaction) => ({
-              name: reaction.name,
-              amount: 0,
-              questionId: clonedQuestion.id,
-              sessionId: session.id,
-            }));
-
-            await prismaClient.reaction.createMany({
-              data: clonedReactions,
-            });
-          }
         }
       } catch (err) {
         const msg = "[E105] Error cloning questions and reactions";
@@ -107,6 +101,7 @@ class CreateSessionService {
         console.error(msg, err);
         throw new Error(msg);
       }
+
 
       let fullSession;
       try {

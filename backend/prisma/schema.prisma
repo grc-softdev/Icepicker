@@ -24,16 +24,17 @@ model User {
 }
 
 model Reaction {
-  id         String         @id @default(uuid())
+  id         String   @id @default(uuid())
   name       String
-  amount     Int            @default(0)
+  amount     Int      @default(0)
   sessionId  String?
   questionId String
-  createdAt   DateTime @default(now())
-  question   Question       @relation(fields: [questionId], references: [id])
+  createdAt  DateTime @default(now())
+  
+  question   Question @relation(fields: [questionId], references: [id])
   userReactions UserReaction[]
 
-  @@unique([questionId, name, sessionId])
+  @@index([questionId, name, sessionId])
 }
  model Question {
   id        String   @id @default(uuid())

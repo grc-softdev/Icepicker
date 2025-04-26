@@ -16,8 +16,6 @@ const Users = ({ users, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
   const { data } = useSelector((state: RootState) => state.session);
   const [showTooltip, setShowTooltip] = useState(true);
-  console.log(users)
-  console.log(data)
   
   const currentUser = data?.currentUser
 
