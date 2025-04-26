@@ -11,18 +11,26 @@ async function main() {
     const exists = await prisma.question.findFirst({
       where: { name: question.name },
     });
-  
+
     if (!exists) {
-      await prisma.question.create({
+      const createdQuestion = await prisma.question.create({
         data: {
           ...question,
           isTemplate: true,
         },
       });
+
+      await prisma.reaction.createMany({
+        data: [
+          { name: "thumb", amount: 0, questionId: createdQuestion.id },
+          { name: "heart", amount: 0, questionId: createdQuestion.id },
+          { name: "laugh", amount: 0, questionId: createdQuestion.id },
+          { name: "surprise", amount: 0, questionId: createdQuestion.id },
+        ],
+      });
     }
   }
 
-  
   const questionsWithoutSessions = await prisma.question.findMany({
     where: {
       isTemplate: false,
@@ -39,7 +47,7 @@ async function main() {
     });
   }
 
-  console.log("Questions successfully created and updated (only ones without sessions)!");
+  console.log("Questions and Reactions successfully created!");
 }
 
 main()

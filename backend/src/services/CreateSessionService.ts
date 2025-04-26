@@ -9,6 +9,7 @@ class CreateSessionService {
         throw new Error("[E100] Validation Error: Name is required");
       }
 
+      // Buscar ou criar usuário
       let user;
       try {
         user = await prismaClient.user.findFirst({ where: { name } });
@@ -22,6 +23,7 @@ class CreateSessionService {
         throw new Error("[E101] Error finding or creating user");
       }
 
+      // Buscar todas as questões template
       let allQuestions;
       try {
         allQuestions = await prismaClient.question.findMany({
@@ -30,7 +32,7 @@ class CreateSessionService {
           include: { reactions: true },
           orderBy: { createdAt: "asc" },
         });
-
+        console.log(allQuestions)
         if (allQuestions.length === 0) {
           throw new Error("[E102] No questions available in DB");
         }
@@ -38,6 +40,7 @@ class CreateSessionService {
         throw new Error("[E103] Error fetching questions");
       }
 
+      // Criar a sessão
       let session;
       try {
         session = await prismaClient.session.create({
@@ -54,15 +57,18 @@ class CreateSessionService {
       } catch (err) {
         throw new Error("[E104] Error creating session");
       }
-
+      
+      // Clonar questões e reações
       try {
         for (const question of allQuestions) {
+          console.log(question)
+          console.log("question", question.name, "reactions", question.reactions);
           const clonedQuestion = await prismaClient.question.create({
-            data: { 
+            data: {
               name: question.name,
               isTemplate: false,
               reactions: {
-                create: question.reactions.map((reaction) => ({
+                create: question.reactions.map(reaction => ({
                   name: reaction.name,
                   amount: 0,
                   sessionId: session.id,
@@ -71,6 +77,8 @@ class CreateSessionService {
             },
           });
 
+
+          // Relacionar a pergunta à sessão
           await prismaClient.sessionQuestion.create({
             data: {
               sessionId: session.id,
@@ -84,6 +92,7 @@ class CreateSessionService {
         throw new Error(msg);
       }
 
+      // Definir a primeira pergunta como a atual
       try {
         const firstClonedQuestion = await prismaClient.sessionQuestion.findFirst({
           where: { sessionId: session.id },
@@ -102,7 +111,7 @@ class CreateSessionService {
         throw new Error(msg);
       }
 
-
+      // Buscar a sessão completa para emitir via socket
       let fullSession;
       try {
         fullSession = await prismaClient.session.findUnique({
