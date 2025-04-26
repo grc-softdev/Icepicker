@@ -1,5 +1,6 @@
 import prismaClient from "../prisma";
 import { getIO } from "../socket";
+import { GetSessionService } from "./GetSessionService";
 
 class UpdateToNextUserService {
   async execute({ sessionId }: { sessionId: string }) {
@@ -21,6 +22,7 @@ class UpdateToNextUserService {
       (usr) => usr.userId === session.currentUserId
     );
 
+    
     const nextIndex =
       currentUser + 1 >= session.users.length ? 0 : currentUser + 1;
 
@@ -34,36 +36,16 @@ class UpdateToNextUserService {
       },
     });
 
-    const fullUpdatedSession = await prismaClient.session.findUnique({
-      where: { id: sessionId },
-      include: {
-        users: {
-          include: {
-            user: true,
-          },
-        },
-        currentUser: true,
-        currentQuestion: {
-          include: {
-            reactions: true,
-          },
-        },
-        questions: {
-          orderBy: { createdAt: "asc" },
-          include: {
-            question: {
-              include: {
-                reactions: true,
-              },
-            },
-          },
-        },
-      },
+    const updatedSession = await new GetSessionService().execute({
+      sessionId,
     });
     const io = getIO()
-    io.to(sessionId).emit("sessionUpdated", fullUpdatedSession);
 
-    return fullUpdatedSession;
+
+
+    io.to(sessionId).emit("sessionUpdated", updatedSession);
+
+    return updatedSession;
   }
 }
 

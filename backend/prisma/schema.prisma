@@ -38,6 +38,7 @@ model Reaction {
  model Question {
   id        String   @id @default(uuid())
   name      String
+  isTemplate Boolean @default(false)
   reactions Reaction[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

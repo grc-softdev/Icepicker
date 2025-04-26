@@ -63,6 +63,8 @@ const Container = ({
 
   console.log(currentQuestion)
 
+  console.log('reactions:', currentQuestion?.reactions);
+
   return (
     <section className="flex items-center justify-center px-1 md:px-2 lg:px-4 w-[348px] h-[100%] lg:w-full">
       <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">

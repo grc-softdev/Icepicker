@@ -19,7 +19,24 @@ async function main() {
     }
   }
 
-  console.log("Questions successfully created!");
+  // Parte nova: Corrigir apenas perguntas sem sessões
+  const questionsWithoutSessions = await prisma.question.findMany({
+    where: {
+      isTemplate: false,
+      sessions: {
+        none: {},
+      },
+    },
+  });
+
+  for (const question of questionsWithoutSessions) {
+    await prisma.question.update({
+      where: { id: question.id },
+      data: { isTemplate: true },
+    });
+  }
+
+  console.log("Questions successfully created and updated (only ones without sessions)!");
 }
 
 main()

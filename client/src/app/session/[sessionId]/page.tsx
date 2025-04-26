@@ -44,14 +44,13 @@ const Session = () => {
   const defaultUser = cachedUserName || "";
   const [name, setName] = useLocalStorage<string>("name", defaultUser);
 
-  const sessionUser = data?.users.find((user) => user.name === name);
+  const sessionUser = data?.users?.find((user) => user.name === name);
   console.log(sessionUser)
   const isAlreadyLoggedIn = name?.length !== 0
 
   const updateToNextQuestion = async () => {
     try {
       await api.put(`/session/${sessionId}/next-question`);
-      await api.get<Data>(`/session/${sessionId}`);
     } catch (err) {
       console.log("Error", err);
     }
@@ -60,8 +59,6 @@ const Session = () => {
   const updateToNextUser = async () => {
     try {
       await api.put(`/session/${sessionId}/next-user`);
-      await api.get<Data>(`/session/${sessionId}`);
-
     } catch (err) {
       console.log("Error", err);
     }
@@ -124,6 +121,7 @@ const Session = () => {
           sessionUser={sessionUser}
           sessionId={sessionId}
         />
+
         <Users users={data?.users} sessionLink={data?.sessionLink} />
       </div>
       {error && <div className="text-red-500">{error}</div>}

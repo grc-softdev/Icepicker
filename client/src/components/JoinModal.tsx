@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setError } from "@/state";
 
+
 type JoinProps = {
   sessionId: string;
   setName?: React.Dispatch<React.SetStateAction<string>>;
@@ -44,9 +45,6 @@ const JoinModal = ({
   };
 
   if (!isOpen) {
-    console.log(`about to return null`)
-
-
     return null;
   }
 

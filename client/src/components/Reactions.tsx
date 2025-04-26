@@ -59,7 +59,7 @@ const Reactions = ({ onReact, reactions }: ReactionsProps) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
               className="absolute left-1/2 top-1/2 text-3xl"
-              style={{ transform: `translate(-50%, -50%)` }}
+              style={{ transform: "translate(-50%, -50%)" }}
             >
               {emoji}
             </motion.div>

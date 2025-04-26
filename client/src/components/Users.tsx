@@ -16,7 +16,9 @@ const Users = ({ users, sessionLink }: UsersProps) => {
   const [copied, setCopied] = useState(false);
   const { data } = useSelector((state: RootState) => state.session);
   const [showTooltip, setShowTooltip] = useState(true);
-
+  console.log(users)
+  console.log(data)
+  
   const currentUser = data?.currentUser
 
   const handleCopyLink = () => {
@@ -37,15 +39,15 @@ const Users = ({ users, sessionLink }: UsersProps) => {
     <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#3B82F6", // Tailwind gray-800
-    color: "#f9fafb",            // Tailwind gray-50
-    fontSize: "0.875rem",        // ~14px
+    backgroundColor: "#3B82F6",
+    color: "#f9fafb",  
+    fontSize: "0.875rem", 
     padding: "10px 14px",
     borderRadius: "8px",
     maxWidth: 220,
   },
   [`& .${tooltipClasses.arrow}`]: {
-    color: "#3B82F6",            // Match tooltip bg
+    color: "#3B82F6",
   },
 }));
 
@@ -54,15 +56,18 @@ const Users = ({ users, sessionLink }: UsersProps) => {
       <ToastContainer />
       <div className="flex flex-col justify-between min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
         <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
-          {users?.map((user) => (
+          {users?.map((user) => {
+            console.log(user, currentUser)
+            return (
               <CardUser
                 name={user.name}
-                key={user.id}
+                key={user.id ?? user.name}
                 avatar={user.avatar}
                 userId={user.id}
                 isCurrent={currentUser?.id === user.id}
               />
-          ))}
+          )
+          })}
         </div>
 
         {sessionLink && (

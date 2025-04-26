@@ -10,15 +10,18 @@ export const socketMiddleware: Middleware = (store) => (next) => (action) => {
       const sessionId = action.payload;
 
       const socketUrl =
-        process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3333";
+        process.env.NEXT_PUBLIC_SOCKET_URL;
 
       socket = io(socketUrl, { transports: ["websocket"] });
 
       socket.emit("join-room", sessionId);
+    
       socket.emit("sessionDeleted", sessionId);
 
       socket.on("sessionUpdated", (updatedData) => {
+        console.log("sessionUpdated")
         store.dispatch(setData(updatedData));
+       
       });
     }
   }

@@ -5,12 +5,15 @@ import { GetSessionService } from "./services/GetSessionService";
 
 let io: Server;
 
+
+const frontendURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://main.d9pxq75h0yt4e.amplifyapp.com'
+
 export const initSocket = (server: http.Server) => {
   io = new Server(server, {
     cors: {
       origin: [
         'https://18.229.125.23.nip.io',
-        'https://main.d9pxq75h0yt4e.amplifyapp.com'],
+        frontendURL],
         methods: ['GET','POST'],
         credentials: true,
     },

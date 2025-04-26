@@ -6,9 +6,7 @@ class CreateSessionService {
   async execute({ name }: { name: string }) {
     try {
       if (!name) {
-        const msg = "[E100] Validation Error: Name is required";
-        console.error(msg);
-        throw new Error(msg);
+        throw new Error("[E100] Validation Error: Name is required");
       }
 
       let user;
@@ -21,28 +19,23 @@ class CreateSessionService {
           });
         }
       } catch (err) {
-        const msg = "[E101] Error finding or creating user";
-        console.error(msg, err);
-        throw new Error(msg);
+        throw new Error("[E101] Error finding or creating user");
       }
 
       let allQuestions;
       try {
         allQuestions = await prismaClient.question.findMany({
+          where: { isTemplate: true },
           take: 25,
           include: { reactions: true },
           orderBy: { createdAt: "asc" },
         });
 
         if (allQuestions.length === 0) {
-          const msg = "[E102] No questions available in DB";
-          console.error(msg);
-          throw new Error(msg);
+          throw new Error("[E102] No questions available in DB");
         }
       } catch (err) {
-        const msg = "[E103] Error fetching questions";
-        console.error(msg, err);
-        throw new Error(msg);
+        throw new Error("[E103] Error fetching questions");
       }
 
       let session;
@@ -59,15 +52,16 @@ class CreateSessionService {
           },
         });
       } catch (err) {
-        const msg = "[E104] Error creating session";
-        console.error(msg, err);
-        throw new Error(msg);
+        throw new Error("[E104] Error creating session");
       }
 
       try {
         for (const question of allQuestions) {
           const clonedQuestion = await prismaClient.question.create({
-            data: { name: question.name },
+            data: { 
+              name: question.name,
+              isTemplate: false,
+             },
           });
 
           await prismaClient.sessionQuestion.create({
@@ -77,16 +71,18 @@ class CreateSessionService {
             },
           });
 
-          const clonedReactions = question.reactions.map((reaction) => ({
-            name: reaction.name,
-            amount: 0,
-            questionId: clonedQuestion.id,
-            sessionId: session.id,
-          }));
+          if (question.reactions.length > 0) {
+            const clonedReactions = question.reactions.map((reaction) => ({
+              name: reaction.name,
+              amount: 0,
+              questionId: clonedQuestion.id,
+              sessionId: session.id,
+            }));
 
-          await prismaClient.reaction.createMany({
-            data: clonedReactions,
-          });
+            await prismaClient.reaction.createMany({
+              data: clonedReactions,
+            });
+          }
         }
       } catch (err) {
         const msg = "[E105] Error cloning questions and reactions";
