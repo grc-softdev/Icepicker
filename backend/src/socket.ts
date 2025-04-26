@@ -12,7 +12,7 @@ export const initSocket = (server: http.Server) => {
   io = new Server(server, {
     cors: {
       origin: [
-        'https://18.229.125.23.nip.io',
+        'https://18.231.17.46.nip.io',
         frontendURL],
         methods: ['GET','POST'],
         credentials: true,

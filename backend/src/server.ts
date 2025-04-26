@@ -15,13 +15,14 @@ import OpenAI from "openai";
 const app = express();
 app.use(express.json());
 
-
 const frontendURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://main.d9pxq75h0yt4e.amplifyapp.com'
 
 
+console.log({frontendURL}, process.env.NODE_ENV)
+
 app.use(cors({
   origin: [
-  'https://18.229.125.23.nip.io',
+  'https://18.231.17.46.nip.io',
   frontendURL
   ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
