@@ -54,7 +54,7 @@ const Home = () => {
             placeholder="Username"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full pl-2 text-gray-700 rounded-md border-solid border-2 border-gray py-1.5 mb-4 relative -left-[1px]"
+            className="w-full pl-2 text-gray-700 rounded-md border-solid border-2 border-blue-500 py-1.5 mb-4 relative -left-[1px]"
           />
           <button
             className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"

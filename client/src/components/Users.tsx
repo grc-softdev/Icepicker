@@ -78,7 +78,7 @@ const Users = ({ users, sessionLink }: UsersProps) => {
                 readOnly
               />
               <CustomTooltip
-                title="Share with others to play!"
+                title="Share with others to play"
                 open={showTooltip && !copied}
                 arrow
                 placement="top"
