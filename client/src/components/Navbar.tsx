@@ -15,7 +15,7 @@ const Navbar = ({ sessionId, sessionUser }: NavbarProps) => {
   const router = useRouter();
   console.log(sessionId, sessionUser)
   const handleLeaveRoom = async () => {
-  console.log(sessionId, sessionUser?.id)
+ 
     try {
       await api.put(`session/${sessionId}/leave`, {
         sessionId,

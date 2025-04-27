@@ -122,7 +122,7 @@ const Session = () => {
           sessionId={sessionId}
         />
 
-        <Users users={data?.users} sessionLink={data?.sessionLink} />
+        <Users users={data?.users} sessionLink={data?.sessionLink} sessionId={sessionId} />
       </div>
       {error && <div className="text-red-500">{error}</div>}
     </div>
