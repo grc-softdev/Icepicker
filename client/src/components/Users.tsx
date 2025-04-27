@@ -21,8 +21,8 @@ const Users = ({ users, sessionLink, sessionId }: UsersProps) => {
   const currentUser = data?.currentUser;
 
   const copToClip =
-    "https://main.d9pxq75h0yt4e.amplifyapp.com/" + `${sessionId}`;
-
+    "https://main.d9pxq75h0yt4e.amplifyapp.com/" + "session/"+`${sessionId}`;
+  console.log(copToClip)
   const handleCopyLink = () => {
     navigator.clipboard.writeText(sessionLink || "");
     setCopied(true);
