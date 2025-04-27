@@ -20,11 +20,9 @@ const Users = ({ users, sessionLink, sessionId }: UsersProps) => {
 
   const currentUser = data?.currentUser;
 
-  const copToClip =
-    "https://main.d9pxq75h0yt4e.amplifyapp.com/" + "session/"+`${sessionId}`;
-  console.log(copToClip)
+  const copToClip = "https://main.d9pxq75h0yt4e.amplifyapp.com/" + "session/"+`${sessionId}`;
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(sessionLink || "");
+    navigator.clipboard.writeText(copToClip || "");
     setCopied(true);
     toast("Invite your friends! =)");
     setTimeout(() => setCopied(false), 2000);
