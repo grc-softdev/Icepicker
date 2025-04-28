@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import nav from "../app/assets/nav.png";
+import icker from "../app/assets/icker.png";
 import { useRouter } from "next/navigation";
 import { api } from "./services/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -44,9 +44,9 @@ const Home = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen rounded-xl bg-magnolia">
+    <div className="p-6 min-h-screen rounded-xl bg-magnolia dark:bg-blue-950">
       <section className="mt-40 flex flex-col items-center">
-        <Image src={nav} alt="logo" width={200} />
+        <Image src={icker} alt="logo" width={200} />
         <form className="w-[400px]" onSubmit={handleLogin}>
           <input
             type="text"
@@ -54,10 +54,10 @@ const Home = () => {
             placeholder="Username"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full pl-2 text-gray-700 rounded-md border-solid border-2 border-blue-500 py-1.5 mb-4 relative -left-[1px]"
+            className="w-[300px] sm:w-full ml-[52px] sm:ml-0 pl-2 text-gray-700  rounded-md border-solid border-2 border-blue-500 py-1.5 mb-4 relative -left-[1px]"
           />
           <button
-            className="rounded-md w-full bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md w-[300px] sm:w-full ml-[52px] sm:ml-0 bg-marine text-white mb-4 py-3 text-sm font-semibold shadow-sm ring-1 ring-inset ring-sky-600 hover:bg-greenblue disabled:cursor-not-allowed disabled:opacity-50"
             type="submit"
           >
             Create Room

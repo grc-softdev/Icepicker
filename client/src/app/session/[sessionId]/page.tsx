@@ -107,7 +107,7 @@ const Session = () => {
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col mb-16 md:mb-10">
+    <div className="w-full min-h-screen dark:bg-blue-950 flex flex-col mb-16 md:mb-10">
       <JoinModal
         sessionId={sessionId}
         setName={setName}

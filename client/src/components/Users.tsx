@@ -54,7 +54,7 @@ const Users = ({ users, sessionLink, sessionId }: UsersProps) => {
   return (
     <section className="flex flex-col mt-6 sm:mt-6 md:mt-0">
       <ToastContainer />
-      <div className="flex flex-col justify-between min-h-[600px] w-[340px] p-4 bg-white rounded-2xl shadow-lg border border-neutral-200">
+      <div className="flex flex-col justify-between min-h-[600px] w-[340px] p-4 bg-white dark:bg-gray-300 rounded-2xl shadow-lg border border-neutral-200">
         <div className="flex flex-col gap-2 overflow-y-auto pr-2 max-h-[480px]">
           {users?.map((user) => {
             console.log(user, currentUser);
@@ -72,10 +72,10 @@ const Users = ({ users, sessionLink, sessionId }: UsersProps) => {
 
         {sessionLink && (
           <div className="mt-6">
-            <div className="flex items-center gap-2 p-3 border border-gray-200 rounded-xl shadow-sm bg-gray-50">
+            <div className="flex items-center gap-2 p-3 border border-gray-200 dark:border-neutral-600 dark:bg-gray-400/50 rounded-xl shadow-sm bg-gray-50">
               <input
                 type="text"
-                className="flex-1 px-3 py-2 text-sm text-gray-600 bg-transparent focus:outline-none"
+                className="flex-1 px-3 py-2 text-sm text-gray-700 font-medium bg-transparent focus:outline-none"
                 value={`${copToClip.substring(0, 28)}...`}
                 readOnly
               />

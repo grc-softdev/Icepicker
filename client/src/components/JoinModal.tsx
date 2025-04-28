@@ -1,6 +1,6 @@
 import { api } from "@/app/services/api";
 import Image from "next/image";
-import nav from "../app/assets/nav.png";
+import icker from "../app/assets/icker.png";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -49,12 +49,12 @@ const JoinModal = ({
   }
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black/50 flex justify-center items-center z-50">
-      <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-background rounded-lg p-6">
+    <div className="fixed inset-0 w-full h-full bg-black/50 dark:bg-blue-950/75 flex justify-center items-center z-50">
+      <div className=" flex flex-col gap-4 items-center justify-center w-[500px] max-h-[600px] bg-background dark:bg-gray-300 rounded-lg mx-8 sm:mx-0 p-4 sm:p-6">
         <form onSubmit={handleJoinSession}>
           <div className="flex items-center justify-center">
             <Image
-              src={nav}
+              src={icker}
               alt="logo"
               width={200}
               className="cursor-pointer flex items-center justify-center"
@@ -66,7 +66,7 @@ const JoinModal = ({
             placeholder="Username"
             value={joinName}
             onChange={(e) => setJoinName(e.target.value)}
-            className="w-full pl-2 text-gray-700 rounded-md border-solid border-2 border-gray py-1.5 mb-2"
+            className="w-full pl-2 text-gray-700 rounded-md border-solid border-2  border-blue-500 py-1.5 mb-2"
             required
           />
           <button

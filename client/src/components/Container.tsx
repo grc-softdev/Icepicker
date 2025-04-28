@@ -61,13 +61,9 @@ const Container = ({
     }
   };
 
-  console.log(currentQuestion)
-
-  console.log('reactions:', currentQuestion?.reactions);
-
   return (
     <section className="flex items-center justify-center px-1 md:px-2 lg:px-4 w-[348px] h-[100%] lg:w-full">
-      <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg border border-neutral-200">
+      <div className="max-w-[600px] w-full flex flex-col items-center justify-center p-8 bg-white dark:bg-gray-300 rounded-2xl shadow-lg border border-neutral-200 dark:border-neutral-600">
         <div className="flex items-center justify-center w-full h-[80px] sm:h-80px md-[90px] lg:[96px] mb-2">
           {currentUser?.avatar &&(<Image
             src={(currentUser?.avatar)}
@@ -80,7 +76,7 @@ const Container = ({
         </div>
 
         {currentUser && (
-          <h2 className="mt-6 md:mt-8 lg:mt-8 text-xl lg:text-2xl font-black text-center mb-2">
+          <h2 className="mt-6 md:mt-8 lg:mt-8 text-xl lg:text-2xl font-black text-center dark:text-gray-700 mb-2">
             {capFirstLetter(currentUser?.name)}
           </h2>
         )}

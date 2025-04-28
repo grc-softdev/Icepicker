@@ -24,8 +24,8 @@ const CardUser = ({
       className={`border w-full h-20 rounded-xl p-3 bg-background flex items-center gap-3 cursor-pointer transition-colors duration-300 
       ${
         isCurrent
-          ? "bg-blue-300 border-neutral-200 shadow-lg"
-          : "hover:bg-blue-200 border-neutral-200"
+          ? "bg-blue-300 border-neutral-200 dark:border-neutral-600 shadow-lg"
+          : "hover:bg-blue-200 dark:bg-blue-200 border-neutral-200 dark:border-neutral-600"
       }`}
     >
       {avatar && (
@@ -40,7 +40,7 @@ const CardUser = ({
       )}
 
       <div className="flex flex-col">
-       {name &&  <span className="font-semibold">{capFirstLetter(name)}</span>}
+       {name &&  <span className="font-semibold dark:text-gray-700">{capFirstLetter(name)}</span>}
         {hostId === userId && (
           <span className="text-xs mt-1 text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full w-fit">
             Host
