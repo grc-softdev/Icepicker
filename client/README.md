@@ -1,32 +1,44 @@
-# Icepiclker
 
-This is a game developed to break the ice in dynamic group situations. The fist user creates the room and can copy the link and share with people to join the session. This first user, called host, can change questions and using AI, can turn the question funnier, serious or exiting, and can change the user that will responds the question. If the host leaves the room before other users, the second user in the line becomes host.
+# Icepicker
+
+**Icepicker** is a game designed to break the ice in dynamic group settings. The first user creates a room and can share a link for others to join. This user, known as the *host*, can cycle through questions and use AI to adjust their tone — making them funnier, more serious, or more exciting. The host can also select which user will answer the question. If the host leaves the session, the next user in line automatically becomes the new host.
+
+👉 [Live Demo](https://main.d9pxq75h0yt4e.amplifyapp.com)
+
+### Screenshots
+
+**Home Page**  	                |**Users** 
+:------------------------------:|:-------------------------------:
+![](public/screenshots/home.png)|![](public/screenshots/users.png)
+:------------------------------:|:-------------------------------:
+**Questions**  	
+![](public/screenshots/questions.png)	
+
 
 ## Getting Started
 
+To run the project locally:
+
+```bash
+npm install  
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-
-Open (http://localhost:3000) with your browser to see the result.
+```
+Then open http://localhost:3000 in your browser.
 
 
-## Learn More
+## Technical Notes
 
-To learn more about Next.js, take a look at the following resources:
+It’s a **monolith**, built entirely from scratch and deployed on **AWS**. This project leverages modern web technologies, including:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Redux Toolkit** for state management  
+- **Tailwind CSS** for layout and styling  
+- Additional components styled with **Emotion** and **Material UI**  
+- **Prisma ORM** with **PostgreSQL** for the backend and database  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The data model was designed with extensibility in mind — for example, including a password field to enable account creation in future iterations.
 
-## Deploy on Vercel
+To support real-time interactions, the app uses **WebSockets**. **AI** is integrated to dynamically rewrite questions based on user preferences. The entire application is deployed on AWS.
 
-This project was deployed on AWS environment. The frontend was deployed on Amplify and the 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Areas for Improvement
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+While I’m proud of this project, I recognize that its growing complexity can be overwhelming at times. After stepping away for a few days, it’s easy to lose track of some of the internal logic. This occasionally slowed down development. With hindsight, I believe I could have implemented some parts using simpler or more efficient logic to better follow the principle of minimal effort.
