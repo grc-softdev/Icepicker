@@ -13,7 +13,7 @@ import OpenAI from "openai";
 
 
 
-export const OWN_ORIGIN = 'https://18.231.17.46.nip.io'
+export const OWN_ORIGIN = 'https://54.207.241.165.nip.io'
 const app = express();
 app.use(express.json());
 
