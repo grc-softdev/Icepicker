@@ -12,8 +12,8 @@ npm run dev
 
 ## Environment Variables
 
-NEXT_PUBLIC_API='http://localhost:3333'
-NEXT_PUBLIC_SOCKET_URL="http://localhost:3333"
+NEXT_PUBLIC_API=
+NEXT_PUBLIC_SOCKET_URL=
 
 # Frontend
 

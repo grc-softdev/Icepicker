@@ -13,18 +13,19 @@ npm run dev
 
 ## Environment Variables
 
+Use the `.env.example` as reference to create your configuration file `.env`.
+
+```bash
 DATABASE_URL=
-
 OPENAI_API_KEY=
-
 PORT=
 NODE_ENV=
-
-OWN_ORIGIN = as frontend URL
+OWN_ORIGIN =
+```
 
 # Backend
 
-This project uses **Prisma ORM** with **PostgreSQL** to manage the backend and database. The data model was built with extensibility in mind — for instance, it includes a `password` field, enabling future iterations with user authentication and account creation.
+This project uses **Prisma ORM** with **PostgreSQL** to manage the backend and database. The data model was built with extensibility in mind, for instance, it includes a `password` field, enabling future iterations with user authentication and account creation.
 
 **Prisma Model**  	            | **Data Flow**
 :------------------------------:|:------------------------------:
